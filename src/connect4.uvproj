@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>connec4</TargetName>
+      <TargetName>connect4</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -104,7 +104,7 @@
           <SimDllName>SARMCM3.DLL</SimDllName>
           <SimDllArguments>-MPU</SimDllArguments>
           <SimDlgDll>DCM.DLL</SimDlgDll>
-          <SimDlgDllArguments> -pCM4 -dLaunchPadDLL</SimDlgDllArguments>
+          <SimDlgDllArguments>-pCM4 -dLaunchPadDLL</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
           <TargetDllArguments>-MPU</TargetDllArguments>
           <TargetDlgDll>TCM.DLL</TargetDlgDll>
@@ -170,7 +170,7 @@
             <Capability>1</Capability>
             <DriverSelection>4097</DriverSelection>
           </Flash1>
-          <bUseTDR>1</bUseTDR>
+          <bUseTDR>0</bUseTDR>
           <Flash2>BIN\lmidk-agdi.dll</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
@@ -210,7 +210,7 @@
             <GenPPlst>0</GenPPlst>
             <AdsCpuType>"Cortex-M4"</AdsCpuType>
             <RvctDeviceName></RvctDeviceName>
-            <mOS>0</mOS>
+            <mOS>1</mOS>
             <uocRom>0</uocRom>
             <uocRam>0</uocRam>
             <hadIROM>1</hadIROM>
@@ -221,7 +221,7 @@
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>1</useUlib>
+            <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <RoSelD>3</RoSelD>
@@ -411,14 +411,29 @@
               <FilePath>.\startup.s</FilePath>
             </File>
             <File>
-              <FileName>UART.c</FileName>
+              <FileName>Nokia5110.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\UART.c</FilePath>
+              <FilePath>.\Nokia5110.c</FilePath>
             </File>
             <File>
-              <FileName>main.c</FileName>
+              <FileName>random.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\random.s</FilePath>
+            </File>
+            <File>
+              <FileName>connect4.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\main.c</FilePath>
+              <FilePath>.\connect4.c</FilePath>
+            </File>
+            <File>
+              <FileName>TExaS.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\TExaS.c</FilePath>
+            </File>
+            <File>
+              <FileName>UARTIO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UARTIO.c</FilePath>
             </File>
           </Files>
         </Group>
