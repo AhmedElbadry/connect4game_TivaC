@@ -1,0 +1,3 @@
+text height = 7 px
+cell width = (fullWidth - 8*2)/7
+cell height = (fullHeight - 7*1)/6
