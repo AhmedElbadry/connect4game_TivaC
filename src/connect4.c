@@ -14,8 +14,11 @@ int const hLineW = 1;
 int const vLineW = 2;
 int const numOfCol = 7;
 int const numOfRow = 6;
+int const coinPadding;
 int leftMargin = 0;
 int topMargin = 0;
+int cellPositions[numOfRow][numOfRow];
+
 
 
 
@@ -88,6 +91,24 @@ const unsigned char arrow[] ={
 
 
 
+struct coin {
+	int x;
+	int y;
+	const unsigned char *image;
+	
+	void (*draw)(struct coin*);
+};
+
+void draw(struct coin* c){
+	
+	(*c).x = 5;
+	
+}
+
+
+
+
+
 
 
 
@@ -122,6 +143,9 @@ void DrawGrid(){
 }
 
 
+//play
+struct coin pl1c;
+struct coin pl2c;
 
 int main(void){
 	//UART_Init();
@@ -135,6 +159,10 @@ int main(void){
 	
 	
 	DrawGrid();
+	
+	
+	draw(&pl1c);
+	
 	
 	Nokia5110_DisplayBuffer(); 
   while(1){
