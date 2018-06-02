@@ -9,6 +9,12 @@
 #include "TExaS.h"
 #include "img.h"
 
+//port f
+void PortF_Init(void);
+
+
+
+
 int const cellW = 8;
 int const cellH = 5;
 int const hLineW = 1;
@@ -28,6 +34,8 @@ int turn;
 int cellCenX;
 int cellCenY;
 int cellCoins[numOfCol];
+int colCenter[numOfCol];
+int playerPos;
 
 int i;
 int	j;
@@ -82,6 +90,7 @@ void gameInit(){
 	cellCenX = vLineW + ceil((double)cellW/2);
 	cellCenY = hLineW + ceil((double)cellH/2);
 	
+	playerPos = 0;
 	
 	//initialize the grid
 	for(i = 0; i < numOfRow; i++){
@@ -123,6 +132,8 @@ void gameInit(){
 	//each column contains 0 coins at the begining
 	for(i = 0; i < numOfCol; i++){
 		cellCoins[i] = 0;
+		
+		colCenter[i] = leftMargin + i*(cellW + vLineW) + cellCenX;
 	}
 	
 }
@@ -160,6 +171,8 @@ void DrawGrid(){
 
 
 
+unsigned int SW1, flag1;
+unsigned int SW2, flag2;
 
 int main(void){
 	//UART_Init();
@@ -168,6 +181,7 @@ int main(void){
   Nokia5110_Init();
   Nokia5110_ClearBuffer();
 	Nokia5110_DisplayBuffer();      // draw buffer
+	PortF_Init();
 	
 	gameInit();
 	
@@ -177,7 +191,7 @@ int main(void){
 	//Nokia5110_PrintBMP(playerOneCoins[0].x, playerOneCoins[0].y, playerOneCoins[0].image, 0);
 	
 	//raw(&playerTwoCoins[0]);
-	
+	/*
 	for(i = 0; i < numOfRow; i++){
 		for(j = 0; j < numOfCol; j++){
 			if(turn%2 == 0){
@@ -193,10 +207,70 @@ int main(void){
 			turn++;
 		}
 		
-	}
+	}*/
 	
-	Nokia5110_DisplayBuffer(); 
+	
+	Nokia5110_SetCursor(1, 0);
+	Nokia5110_OutString("player");
+	
+	
   while(1){
+		Nokia5110_ClearBuffer();
+		SW1 = GPIO_PORTF_DATA_R&0x10;
+		SW2 = GPIO_PORTF_DATA_R&0x01;
+		flag1 = 0;
+		flag2 = 0;
+		playerPos = 0;
+		
+		
+		
+		
+		
+		//if it's player one turn
+		if(turn % 2 == 0){
+			
+			while(1){
+				Nokia5110_ClearBuffer();
+				SW1 = GPIO_PORTF_DATA_R&0x10;
+				SW2 = GPIO_PORTF_DATA_R&0x01;
+				
+				//draw player coin
+				draw(&playerOneCoins[turn/2]);
+				//draw grid
+				DrawGrid();
+				
+				//SW1 on release, move to the next position
+				if(!SW1){
+					
+					//wait untill SW1 is released
+					while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
+					playerPos = (playerPos + 1)%numOfCol;
+					playerOneCoins[turn/2].x = colCenter[playerPos];
+				}
+				
+				//SW2 on release, place the coin in the column if possible
+				if(!SW2){
+					
+					//wait untill SW2 is released
+					while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
+					
+					if(cellCoins[playerPos] < numOfRow){
+						theGrid[numOfRow - 1 - cellCoins[playerPos]][playerPos].player = turn%2 + 1;
+						playerOneCoins[turn/2].y = theGrid[numOfRow - 1 - cellCoins[playerPos]][playerPos].y;
+						cellCoins[playerPos]++;
+					}
+				}
+				
+				Nokia5110_DisplayBuffer(); 
+			}
+			
+		}
+		
+		
+		
+		
+		
+		Nokia5110_DisplayBuffer(); 
   }
 
 }
@@ -210,4 +284,17 @@ void Delay100ms(unsigned long count){unsigned long volatile time;
     }
     count--;
   }
+}
+
+void PortF_Init(void){ volatile unsigned long delay;
+  SYSCTL_RCGC2_R |= 0x00000020;     // 1) F clock
+  delay = SYSCTL_RCGC2_R;           // delay   
+  GPIO_PORTF_LOCK_R = 0x4C4F434B;   // 2) unlock PortF PF0  
+  GPIO_PORTF_CR_R = 0x1F;           // allow changes to PF4-0       
+  GPIO_PORTF_AMSEL_R = 0x00;        // 3) disable analog function
+  GPIO_PORTF_PCTL_R = 0x00000000;   // 4) GPIO clear bit PCTL  
+  GPIO_PORTF_DIR_R = 0x0E;          // 5) PF4,PF0 input, PF3,PF2,PF1 output   
+  GPIO_PORTF_AFSEL_R = 0x00;        // 6) no alternate function
+  GPIO_PORTF_PUR_R = 0x11;          // enable pullup resistors on PF4,PF0       
+  GPIO_PORTF_DEN_R = 0x1F;          // 7) enable digital pins PF4-PF0        
 }
