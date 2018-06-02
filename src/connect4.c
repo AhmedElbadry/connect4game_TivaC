@@ -31,11 +31,13 @@ int topMargin;
 int fullGridH;
 int fullGridW;
 int turn;
+int lastTurn;
 int cellCenX;
 int cellCenY;
 int cellCoins[numOfCol];
 int colCenter[numOfCol];
 int playerPos;
+int winner;
 
 int i;
 int	j;
@@ -66,11 +68,13 @@ struct coin {
 
 void draw(struct coin* c){
 	Nokia5110_PrintBMP((*c).x - coinW/2, (*c).y + ceil((double)coinH/2), (*c).image, 0);
+	
 }
 
 
 struct coin playerOneCoins[numOfCoinsForEachPlayer];
 struct coin playerTwoCoins[numOfCoinsForEachPlayer];
+struct coin playersCoins[2][numOfCoinsForEachPlayer];
 
 
 
@@ -106,6 +110,7 @@ void gameInit(){
 	
 	//initialize the turn
 	turn = 0;
+	lastTurn = 0;
 	
 	
 	//initialize players coins
@@ -114,18 +119,26 @@ void gameInit(){
 		
 		//locate the coins on the top left of the grid and in the center of the 1st column
 		//player one
-		playerOneCoins[i].x = leftMargin + cellCenX;
-		playerOneCoins[i].y = SCREENH - 1 - fullGridH;
+		//playerOneCoins[i].x = leftMargin + cellCenX;
+		//playerOneCoins[i].y = SCREENH - 1 - fullGridH;
+		playersCoins[0][i].x = leftMargin + cellCenX;
+		playersCoins[0][i].y = SCREENH - 1 - fullGridH;
+		
 		//player two
-		playerTwoCoins[i].x = leftMargin + cellCenX;
-		playerTwoCoins[i].y = SCREENH - 1 - fullGridH;
+		//playerTwoCoins[i].x = leftMargin + cellCenX;
+		//playerTwoCoins[i].y = SCREENH - 1 - fullGridH;
+		playersCoins[1][i].x = leftMargin + cellCenX;
+		playersCoins[1][i].y = SCREENH - 1 - fullGridH;
 		
 		
 		//set the img for each player
 		//player one
-		playerOneCoins[i].image = pl1coin;
+		//playerOneCoins[i].image = pl1coin;
 		//player two
-		playerTwoCoins[i].image = pl2coin;
+		//playerTwoCoins[i].image = pl2coin;
+		playersCoins[0][i].image = pl1coin;
+		playersCoins[1][i].image = pl2coin;
+		
 		
 	}
 	
@@ -166,10 +179,101 @@ void DrawGrid(){
 		
 		i++;
 	}
+}
+
+void update(){
+	Nokia5110_ClearBuffer();
 	
+	
+	//show grid
+	DrawGrid();
+	
+	//show current player
+	draw(&playersCoins[turn%2][turn/2]);
+	
+	
+	//show the coins inside the grid
+	
+	for(i = 0; i < turn; i++){
+		draw(&playersCoins[i%2][i/2]);
+	}
+	
+	
+	Nokia5110_DisplayBuffer();
+	
+
 }
 
 
+
+
+//check if there is a winner
+//return 1 if player one is the winner
+//return 2 if player two is the winner
+int isThereAwinner(){
+	int status = 0;
+	for(i = 0; i < numOfRow; i++){
+		for(j = 0; j < numOfCol; j++){
+			//check vertically
+			if(i + 3 < numOfRow){
+				if(
+					theGrid[i][j].player == theGrid[i+1][j].player &&
+					theGrid[i+1][j].player == theGrid[i+2][j].player &&
+					theGrid[i+2][j].player == theGrid[i+3][j].player &&
+					theGrid[i][j].player != 0
+					){
+						status = theGrid[i][j].player;
+						break;
+					}
+			}
+			
+			//horizontally
+			if(j + 3 < numOfCol){
+				if(
+					theGrid[i][j].player == theGrid[i][j+1].player &&
+					theGrid[i][j+1].player == theGrid[i][j+2].player &&
+					theGrid[i][j+2].player == theGrid[i][j+3].player &&
+					theGrid[i][j].player != 0
+					){
+						status = theGrid[i][j].player;
+						break;
+					}
+			}
+			
+			//diagonally right
+			if(i + 3 < numOfRow && j + 3 < numOfCol){
+				if(
+					theGrid[i][j].player == theGrid[i+1][j+1].player &&
+					theGrid[i+1][j+1].player == theGrid[i+2][j+2].player &&
+					theGrid[i+2][j+2].player == theGrid[i+3][j+3].player &&
+					theGrid[i][j].player != 0
+					){
+						status = theGrid[i][j].player;
+						break;
+					}
+			}
+			
+			//diagonally left
+			if(i + 3 < numOfRow && j - 3 >= 0){
+				if(
+					theGrid[i][j].player == theGrid[i+1][j-1].player &&
+					theGrid[i+1][j-1].player == theGrid[i+2][j-2].player &&
+					theGrid[i+2][j-2].player == theGrid[i+3][j-3].player &&
+					theGrid[i][j].player != 0
+					){
+						status = theGrid[i][j].player;
+						break;
+					}
+			}
+		}
+		
+		if(status != 0)
+			break;
+	}
+	
+	
+	return status ;
+}
 
 unsigned int SW1, flag1;
 unsigned int SW2, flag2;
@@ -210,34 +314,48 @@ int main(void){
 	}*/
 	
 	
-	Nokia5110_SetCursor(1, 0);
-	Nokia5110_OutString("player");
-	
+	flag1 = 0;
+	flag2 = 0;
 	
   while(1){
 		Nokia5110_ClearBuffer();
 		SW1 = GPIO_PORTF_DATA_R&0x10;
 		SW2 = GPIO_PORTF_DATA_R&0x01;
-		flag1 = 0;
-		flag2 = 0;
-		playerPos = 0;
 		
-		
-		
-		
-		
-		//if it's player one turn
-		if(turn % 2 == 0){
+		if(turn > lastTurn){
+			playerPos = 0;
+			lastTurn = turn;
+		}
+		update();
+		winner = isThereAwinner();
+		if(winner){
+			Nokia5110_ClearBuffer();
+			Nokia5110_DisplayBuffer();
+			Nokia5110_Clear();
+			Nokia5110_SetCursor(1, 1);
 			
-			while(1){
-				Nokia5110_ClearBuffer();
-				SW1 = GPIO_PORTF_DATA_R&0x10;
-				SW2 = GPIO_PORTF_DATA_R&0x01;
+			if(winner == 1 )
+				Nokia5110_OutString("Player one wins");
+			else
+				Nokia5110_OutString("Player two wins");
+			
+			break;
+		}
+		//if it's player one turn
+		//if(turn % 2 == 0){
+			
+			//while(1){
+
 				
 				//draw player coin
-				draw(&playerOneCoins[turn/2]);
+				//draw(&playersCoins[turn%2][turn/2]);
 				//draw grid
-				DrawGrid();
+				//DrawGrid();
+				
+				while(SW1 && SW2){
+					SW1 = GPIO_PORTF_DATA_R&0x10;
+					SW2 = GPIO_PORTF_DATA_R&0x01;
+				};
 				
 				//SW1 on release, move to the next position
 				if(!SW1){
@@ -245,32 +363,26 @@ int main(void){
 					//wait untill SW1 is released
 					while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
 					playerPos = (playerPos + 1)%numOfCol;
-					playerOneCoins[turn/2].x = colCenter[playerPos];
+					playersCoins[turn%2][turn/2].x = colCenter[playerPos];
 				}
 				
 				//SW2 on release, place the coin in the column if possible
 				if(!SW2){
-					
 					//wait untill SW2 is released
 					while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
 					
 					if(cellCoins[playerPos] < numOfRow){
 						theGrid[numOfRow - 1 - cellCoins[playerPos]][playerPos].player = turn%2 + 1;
-						playerOneCoins[turn/2].y = theGrid[numOfRow - 1 - cellCoins[playerPos]][playerPos].y;
+						playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - cellCoins[playerPos]][playerPos].y;
 						cellCoins[playerPos]++;
+						turn++;
 					}
 				}
 				
-				Nokia5110_DisplayBuffer(); 
-			}
+			//}
 			
-		}
+		//}
 		
-		
-		
-		
-		
-		Nokia5110_DisplayBuffer(); 
   }
 
 }
