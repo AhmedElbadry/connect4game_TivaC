@@ -33,7 +33,11 @@ Section Cross References
     connect4.o(i.DrawGrid) refers to nokia5110.o(i.Nokia5110_PrintBMP) for Nokia5110_PrintBMP
     connect4.o(i.DrawGrid) refers to connect4.o(.data) for leftMargin
     connect4.o(i.DrawGrid) refers to connect4.o(.constdata) for vvLine
-    connect4.o(i.gameInit) refers to connect4.o(.data) for leftMargin
+    connect4.o(i.gameInit) refers to ceil.o(i.ceil) for ceil
+    connect4.o(i.gameInit) refers to daddsub_clz.o(x$fpl$dadd) for __aeabi_dadd
+    connect4.o(i.gameInit) refers to dfix.o(x$fpl$dfix) for __aeabi_d2iz
+    connect4.o(i.gameInit) refers to connect4.o(.data) for fullGridW
+    connect4.o(i.gameInit) refers to connect4.o(.bss) for cellPositions
     connect4.o(i.main) refers to texas.o(i.TExaS_Init) for TExaS_Init
     connect4.o(i.main) refers to random.o(.text) for Random_Init
     connect4.o(i.main) refers to nokia5110.o(i.Nokia5110_Init) for Nokia5110_Init
@@ -61,12 +65,36 @@ Section Cross References
     uartio.o(i.fgetc) refers to uartio.o(i.UART_OutChar) for UART_OutChar
     uartio.o(i.fputc) refers to uartio.o(i.UART_OutChar) for UART_OutChar
     __main.o(!!!main) refers to rtentry.o(.ARM.Collect$$rtentry$$00000000) for __rt_entry
+    daddsub_clz.o(x$fpl$dadd) refers (Special) to usenofp.o(x$fpl$usenofp) for __I$use$fp
+    daddsub_clz.o(x$fpl$dadd) refers to daddsub_clz.o(x$fpl$dsub) for _dsub1
+    daddsub_clz.o(x$fpl$dadd) refers to dretinf.o(x$fpl$dretinf) for __fpl_dretinf
+    daddsub_clz.o(x$fpl$dadd) refers to dnaninf.o(x$fpl$dnaninf) for __fpl_dnaninf
+    daddsub_clz.o(x$fpl$drsb) refers (Special) to usenofp.o(x$fpl$usenofp) for __I$use$fp
+    daddsub_clz.o(x$fpl$drsb) refers to daddsub_clz.o(x$fpl$dadd) for _dadd1
+    daddsub_clz.o(x$fpl$drsb) refers to daddsub_clz.o(x$fpl$dsub) for _dsub1
+    daddsub_clz.o(x$fpl$dsub) refers (Special) to usenofp.o(x$fpl$usenofp) for __I$use$fp
+    daddsub_clz.o(x$fpl$dsub) refers to daddsub_clz.o(x$fpl$dadd) for _dadd1
+    daddsub_clz.o(x$fpl$dsub) refers to dnaninf.o(x$fpl$dnaninf) for __fpl_dnaninf
+    dfix.o(x$fpl$dfix) refers (Special) to usenofp.o(x$fpl$usenofp) for __I$use$fp
+    dfix.o(x$fpl$dfix) refers to dnaninf.o(x$fpl$dnaninf) for __fpl_dnaninf
+    dfix.o(x$fpl$dfixr) refers (Special) to usenofp.o(x$fpl$usenofp) for __I$use$fp
+    dfix.o(x$fpl$dfixr) refers to dnaninf.o(x$fpl$dnaninf) for __fpl_dnaninf
+    ceil.o(i.__softfp_ceil) refers (Special) to usenofp.o(x$fpl$usenofp) for __I$use$fp
+    ceil.o(i.__softfp_ceil) refers to ceil.o(i.ceil) for ceil
+    ceil.o(i.ceil) refers (Special) to usenofp.o(x$fpl$usenofp) for __I$use$fp
+    ceil.o(i.ceil) refers to daddsub_clz.o(x$fpl$dadd) for __aeabi_dadd
+    ceil.o(i.ceil) refers to drleqf.o(x$fpl$drleqf) for __aeabi_cdrcmple
+    ceil.o(i.ceil) refers to daddsub_clz.o(x$fpl$drsb) for __aeabi_drsub
     rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to rtentry2.o(.ARM.Collect$$rtentry$$0000000A) for __rt_entry_li
     rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to rtentry2.o(.ARM.Collect$$rtentry$$0000000D) for __rt_entry_main
     rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to rtentry2.o(.ARM.Collect$$rtentry$$0000000C) for __rt_entry_postli_1
     rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to rtentry2.o(.ARM.Collect$$rtentry$$00000009) for __rt_entry_postsh_1
     rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to rtentry2.o(.ARM.Collect$$rtentry$$00000002) for __rt_entry_presh_1
     rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to rtentry4.o(.ARM.Collect$$rtentry$$00000004) for __rt_entry_sh
+    dnaninf.o(x$fpl$dnaninf) refers (Special) to usenofp.o(x$fpl$usenofp) for __I$use$fp
+    dretinf.o(x$fpl$dretinf) refers (Special) to usenofp.o(x$fpl$usenofp) for __I$use$fp
+    drleqf.o(x$fpl$drleqf) refers (Special) to usenofp.o(x$fpl$usenofp) for __I$use$fp
+    drleqf.o(x$fpl$drleqf) refers to dleqf.o(x$fpl$dleqf) for __fpl_dcmple_InfNaN
     rtentry2.o(.ARM.Collect$$rtentry$$00000008) refers to boardinit2.o(.text) for _platform_post_stackheap_init
     rtentry2.o(.ARM.Collect$$rtentry$$0000000A) refers to libinit.o(.ARM.Collect$$libinit$$00000000) for __rt_lib_init
     rtentry2.o(.ARM.Collect$$rtentry$$0000000B) refers to boardinit3.o(.text) for _platform_post_lib_init
@@ -79,6 +107,9 @@ Section Cross References
     rtentry2.o(.ARM.exidx) refers to rtentry2.o(.ARM.Collect$$rtentry$$0000000D) for .ARM.Collect$$rtentry$$0000000D
     rtentry4.o(.ARM.Collect$$rtentry$$00000004) refers to sys_stackheap_outer.o(.text) for __user_setup_stackheap
     rtentry4.o(.ARM.exidx) refers to rtentry4.o(.ARM.Collect$$rtentry$$00000004) for .ARM.Collect$$rtentry$$00000004
+    dleqf.o(x$fpl$dleqf) refers (Special) to usenofp.o(x$fpl$usenofp) for __I$use$fp
+    dleqf.o(x$fpl$dleqf) refers to dnaninf.o(x$fpl$dnaninf) for __fpl_dnaninf
+    dleqf.o(x$fpl$dleqf) refers to dcmpi.o(x$fpl$dcmpinf) for __fpl_dcmp_Inf
     sys_stackheap_outer.o(.text) refers to libspace.o(.text) for __user_perproc_libspace
     sys_stackheap_outer.o(.text) refers to startup.o(.text) for __user_initial_stackheap
     exit.o(.text) refers to rtexit.o(.ARM.Collect$$rtexit$$00000000) for __rt_exit
@@ -102,6 +133,7 @@ Section Cross References
     libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000001B) for __rt_lib_init_signal_1
     libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000023) for __rt_lib_init_stdio_1
     libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000000A) for __rt_lib_init_user_alloc_1
+    dcmpi.o(x$fpl$dcmpinf) refers (Special) to usenofp.o(x$fpl$usenofp) for __I$use$fp
     libspace.o(.text) refers to libspace.o(.bss) for __libspace_start
     rtexit.o(.ARM.Collect$$rtexit$$00000000) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000004) for __rt_exit_exit
     rtexit.o(.ARM.Collect$$rtexit$$00000000) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000003) for __rt_exit_ls
@@ -197,52 +229,61 @@ Image Symbol Table
     RESET                                    0x00000000   Section      644  startup.o(RESET)
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit1.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit2.o ABSOLUTE
-    ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit3.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardshut.o ABSOLUTE
-    ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_zi.o ABSOLUTE
+    ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit3.o ABSOLUTE
     ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_copy.o ABSOLUTE
+    ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_zi.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit2.o ABSOLUTE
+    ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry4.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry2.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry.o ABSOLUTE
+    ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit2.o ABSOLUTE
     ../clib/angel/rt.s                       0x00000000   Number         0  rt_raise.o ABSOLUTE
     ../clib/angel/scatter.s                  0x00000000   Number         0  __scatter.o ABSOLUTE
     ../clib/angel/startup.s                  0x00000000   Number         0  __main.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  use_no_semi.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  indicate_semi.o ABSOLUTE
-    ../clib/angel/sys.s                      0x00000000   Number         0  sys_stackheap_outer.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  libspace.o ABSOLUTE
-    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_exit.o ABSOLUTE
-    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_command.o ABSOLUTE
+    ../clib/angel/sys.s                      0x00000000   Number         0  sys_stackheap_outer.o ABSOLUTE
     ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_wrch.o ABSOLUTE
+    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_command.o ABSOLUTE
+    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_exit.o ABSOLUTE
+    ../clib/armsys.c                         0x00000000   Number         0  no_argv.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  _get_argv_nomalloc.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
-    ../clib/armsys.c                         0x00000000   Number         0  no_argv.o ABSOLUTE
     ../clib/heapalloc.c                      0x00000000   Number         0  hrguard.o ABSOLUTE
     ../clib/heapaux.c                        0x00000000   Number         0  heapauxi.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libinit.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libinit2.o ABSOLUTE
-    ../clib/libinit.s                        0x00000000   Number         0  libshutdown2.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libshutdown.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_exit.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtred_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_formal.o ABSOLUTE
+    ../clib/libinit.s                        0x00000000   Number         0  libshutdown2.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_outer.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_stak_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_pvfn_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_segv_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_formal.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_other.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_general.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  __raise.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_segv_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_cppl_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_pvfn_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_stak_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtred_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  __raise.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_exit.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_general.o ABSOLUTE
     ../clib/signal.s                         0x00000000   Number         0  defsig.o ABSOLUTE
     ../clib/stdlib.c                         0x00000000   Number         0  exit.o ABSOLUTE
+    ../fplib/daddsub.s                       0x00000000   Number         0  daddsub_clz.o ABSOLUTE
+    ../fplib/dcmpi.s                         0x00000000   Number         0  dcmpi.o ABSOLUTE
+    ../fplib/dfix.s                          0x00000000   Number         0  dfix.o ABSOLUTE
+    ../fplib/dleqf.s                         0x00000000   Number         0  dleqf.o ABSOLUTE
+    ../fplib/dnaninf.s                       0x00000000   Number         0  dnaninf.o ABSOLUTE
+    ../fplib/dretinf.s                       0x00000000   Number         0  dretinf.o ABSOLUTE
+    ../fplib/drleqf.s                        0x00000000   Number         0  drleqf.o ABSOLUTE
     ../fplib/fpinit.s                        0x00000000   Number         0  fpinit.o ABSOLUTE
+    ../fplib/usenofp.s                       0x00000000   Number         0  usenofp.o ABSOLUTE
+    ../mathlib/ceil.c                        0x00000000   Number         0  ceil.o ABSOLUTE
     Nokia5110.c                              0x00000000   Number         0  nokia5110.o ABSOLUTE
     TExaS.c                                  0x00000000   Number         0  texas.o ABSOLUTE
     UARTIO.c                                 0x00000000   Number         0  uartio.o ABSOLUTE
@@ -318,32 +359,45 @@ Image Symbol Table
     i.Timer4A_Handler                        0x00000b2c   Section        0  texas.o(i.Timer4A_Handler)
     i.Timer5A_Handler                        0x00000b4c   Section        0  texas.o(i.Timer5A_Handler)
     i.UART0_Init                             0x00000b7c   Section        0  texas.o(i.UART0_Init)
-    i.draw                                   0x00000c3c   Section        0  connect4.o(i.draw)
-    i.gameInit                               0x00000c44   Section        0  connect4.o(i.gameInit)
-    i.lcdwrite                               0x00000c58   Section        0  nokia5110.o(i.lcdwrite)
-    lcdwrite                                 0x00000c59   Thumb Code    66  nokia5110.o(i.lcdwrite)
-    i.main                                   0x00000ca4   Section        0  connect4.o(i.main)
-    .constdata                               0x00000cd8   Section     1464  connect4.o(.constdata)
-    ASCII                                    0x00000cd8   Data         480  connect4.o(.constdata)
-    .constdata                               0x00001290   Section      360  texas.o(.constdata)
-    .data                                    0x20000000   Section        8  connect4.o(.data)
-    .data                                    0x20000008   Section       52  texas.o(.data)
-    DATA                                     0x2000003c   Section        4  random.o(DATA)
-    M                                        0x2000003c   Data           4  random.o(DATA)
-    .bss                                     0x20000040   Section      504  nokia5110.o(.bss)
-    .bss                                     0x20000238   Section      176  connect4.o(.bss)
-    .bss                                     0x200002e8   Section       56  texas.o(.bss)
-    .bss                                     0x20000320   Section       96  libspace.o(.bss)
-    HEAP                                     0x20000380   Section        0  startup.o(HEAP)
-    STACK                                    0x20000380   Section     1024  startup.o(STACK)
-    HeapMem                                  0x20000380   Data           0  startup.o(HEAP)
-    StackMem                                 0x20000380   Data           0  startup.o(STACK)
+    i.ceil                                   0x00000c3c   Section        0  ceil.o(i.ceil)
+    i.draw                                   0x00000d18   Section        0  connect4.o(i.draw)
+    i.gameInit                               0x00000d20   Section        0  connect4.o(i.gameInit)
+    i.lcdwrite                               0x00000e5c   Section        0  nokia5110.o(i.lcdwrite)
+    lcdwrite                                 0x00000e5d   Thumb Code    66  nokia5110.o(i.lcdwrite)
+    i.main                                   0x00000ea8   Section        0  connect4.o(i.main)
+    x$fpl$dadd                               0x00000edc   Section      336  daddsub_clz.o(x$fpl$dadd)
+    _dadd1                                   0x00000eed   Thumb Code     0  daddsub_clz.o(x$fpl$dadd)
+    x$fpl$dcmpinf                            0x0000102c   Section       24  dcmpi.o(x$fpl$dcmpinf)
+    x$fpl$dfix                               0x00001044   Section       94  dfix.o(x$fpl$dfix)
+    x$fpl$dleqf                              0x000010a4   Section      120  dleqf.o(x$fpl$dleqf)
+    x$fpl$dnaninf                            0x0000111c   Section      156  dnaninf.o(x$fpl$dnaninf)
+    x$fpl$dretinf                            0x000011b8   Section       12  dretinf.o(x$fpl$dretinf)
+    x$fpl$drleqf                             0x000011c4   Section      108  drleqf.o(x$fpl$drleqf)
+    x$fpl$drsb                               0x00001230   Section       22  daddsub_clz.o(x$fpl$drsb)
+    x$fpl$dsub                               0x00001248   Section      468  daddsub_clz.o(x$fpl$dsub)
+    _dsub1                                   0x00001259   Thumb Code     0  daddsub_clz.o(x$fpl$dsub)
+    .constdata                               0x0000141c   Section     1464  connect4.o(.constdata)
+    x$fpl$usenofp                            0x0000141c   Section        0  usenofp.o(x$fpl$usenofp)
+    ASCII                                    0x0000141c   Data         480  connect4.o(.constdata)
+    .constdata                               0x000019d4   Section      360  texas.o(.constdata)
+    .data                                    0x20000000   Section       36  connect4.o(.data)
+    .data                                    0x20000024   Section       52  texas.o(.data)
+    DATA                                     0x20000058   Section        4  random.o(DATA)
+    M                                        0x20000058   Data           4  random.o(DATA)
+    .bss                                     0x2000005c   Section      504  nokia5110.o(.bss)
+    .bss                                     0x20000254   Section      368  connect4.o(.bss)
+    .bss                                     0x200003c8   Section       56  texas.o(.bss)
+    .bss                                     0x20000400   Section       96  libspace.o(.bss)
+    HEAP                                     0x20000460   Section        0  startup.o(HEAP)
+    STACK                                    0x20000460   Section     1024  startup.o(STACK)
+    HeapMem                                  0x20000460   Data           0  startup.o(HEAP)
+    StackMem                                 0x20000460   Data           0  startup.o(STACK)
 
     Global Symbols
 
     Symbol Name                              Value     Ov Type        Size  Object(Section)
 
-    BuildAttributes$$THM_ISAv4$E$P$D$K$B$S$7EM$PE$A:L22UL41UL21$X:L11$S22US41US21$IEEE1$IW$USESV6$~STKCKD$USESV7$~SHL$OSPACE$ROPI$EBA8$UX$STANDARDLIB$REQ8$PRES8$EABIv2 0x00000000   Number         0  anon$$obj.o ABSOLUTE
+    BuildAttributes$$THM_ISAv4$E$P$D$K$B$S$7EM$PE$A:L22UL41UL21$X:L11$S22US41US21$IEEE1$IW$USESV6$~STKCKD$USESV7$~SHL$OTIME$ROPI$IEEEJ$EBA8$UX$STANDARDLIB$REQ8$PRES8$EABIv2 0x00000000   Number         0  anon$$obj.o ABSOLUTE
     __ARM_use_no_argv                        0x00000000   Number         0  connect4.o ABSOLUTE
     __Vectors                                0x00000000   Data           0  startup.o(RESET)
     __ARM_exceptions_init                     - Undefined Weak Reference
@@ -577,54 +631,79 @@ Image Symbol Table
     Timer4A_Handler                          0x00000b2d   Thumb Code    20  texas.o(i.Timer4A_Handler)
     Timer5A_Handler                          0x00000b4d   Thumb Code    34  texas.o(i.Timer5A_Handler)
     UART0_Init                               0x00000b7d   Thumb Code   160  texas.o(i.UART0_Init)
-    draw                                     0x00000c3d   Thumb Code     6  connect4.o(i.draw)
-    gameInit                                 0x00000c45   Thumb Code    12  connect4.o(i.gameInit)
-    main                                     0x00000ca5   Thumb Code    46  connect4.o(i.main)
-    cellW                                    0x00000eb8   Data           4  connect4.o(.constdata)
-    cellH                                    0x00000ebc   Data           4  connect4.o(.constdata)
-    hLineW                                   0x00000ec0   Data           4  connect4.o(.constdata)
-    vLineW                                   0x00000ec4   Data           4  connect4.o(.constdata)
-    numOfCol                                 0x00000ec8   Data           4  connect4.o(.constdata)
-    numOfRow                                 0x00000ecc   Data           4  connect4.o(.constdata)
-    hLine                                    0x00000ed0   Data         157  connect4.o(.constdata)
-    vvLine                                   0x00000f6d   Data         269  connect4.o(.constdata)
-    pxl                                      0x0000107a   Data         129  connect4.o(.constdata)
-    pl1coin                                  0x000010fb   Data         133  connect4.o(.constdata)
-    pl2coin                                  0x00001180   Data         133  connect4.o(.constdata)
-    arrow                                    0x00001205   Data         133  connect4.o(.constdata)
-    coinPadding                              0x0000128c   Data           4  connect4.o(.constdata)
-    NoInputMsg                               0x00001290   Data          40  texas.o(.constdata)
-    OutputPortMsg0                           0x000012b8   Data          40  texas.o(.constdata)
-    OutputPortMsg1                           0x000012e0   Data          40  texas.o(.constdata)
-    OutputPortMsg2                           0x00001308   Data          40  texas.o(.constdata)
-    OutputPortMsg3                           0x00001330   Data          40  texas.o(.constdata)
-    BlankMsg                                 0x00001358   Data          40  texas.o(.constdata)
-    InitializedMsg                           0x00001380   Data          40  texas.o(.constdata)
-    IntroMsg                                 0x000013a8   Data          40  texas.o(.constdata)
-    DoneMsg                                  0x000013d0   Data          40  texas.o(.constdata)
-    Region$$Table$$Base                      0x000013f8   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00001418   Number         0  anon$$obj.o(Region$$Table)
+    ceil                                     0x00000c3d   Thumb Code   204  ceil.o(i.ceil)
+    draw                                     0x00000d19   Thumb Code     6  connect4.o(i.draw)
+    gameInit                                 0x00000d21   Thumb Code   262  connect4.o(i.gameInit)
+    main                                     0x00000ea9   Thumb Code    46  connect4.o(i.main)
+    __aeabi_dadd                             0x00000edd   Thumb Code     0  daddsub_clz.o(x$fpl$dadd)
+    _dadd                                    0x00000edd   Thumb Code   332  daddsub_clz.o(x$fpl$dadd)
+    __fpl_dcmp_Inf                           0x0000102d   Thumb Code    24  dcmpi.o(x$fpl$dcmpinf)
+    __aeabi_d2iz                             0x00001045   Thumb Code     0  dfix.o(x$fpl$dfix)
+    _dfix                                    0x00001045   Thumb Code    94  dfix.o(x$fpl$dfix)
+    __aeabi_cdcmple                          0x000010a5   Thumb Code     0  dleqf.o(x$fpl$dleqf)
+    _dcmple                                  0x000010a5   Thumb Code   120  dleqf.o(x$fpl$dleqf)
+    __fpl_dcmple_InfNaN                      0x00001107   Thumb Code     0  dleqf.o(x$fpl$dleqf)
+    __fpl_dnaninf                            0x0000111d   Thumb Code   156  dnaninf.o(x$fpl$dnaninf)
+    __fpl_dretinf                            0x000011b9   Thumb Code    12  dretinf.o(x$fpl$dretinf)
+    __aeabi_cdrcmple                         0x000011c5   Thumb Code     0  drleqf.o(x$fpl$drleqf)
+    _drcmple                                 0x000011c5   Thumb Code   108  drleqf.o(x$fpl$drleqf)
+    __aeabi_drsub                            0x00001231   Thumb Code     0  daddsub_clz.o(x$fpl$drsb)
+    _drsb                                    0x00001231   Thumb Code    22  daddsub_clz.o(x$fpl$drsb)
+    __aeabi_dsub                             0x00001249   Thumb Code     0  daddsub_clz.o(x$fpl$dsub)
+    _dsub                                    0x00001249   Thumb Code   464  daddsub_clz.o(x$fpl$dsub)
+    __I$use$fp                               0x0000141c   Number         0  usenofp.o(x$fpl$usenofp)
+    cellW                                    0x000015fc   Data           4  connect4.o(.constdata)
+    cellH                                    0x00001600   Data           4  connect4.o(.constdata)
+    hLineW                                   0x00001604   Data           4  connect4.o(.constdata)
+    vLineW                                   0x00001608   Data           4  connect4.o(.constdata)
+    numOfCol                                 0x0000160c   Data           4  connect4.o(.constdata)
+    numOfRow                                 0x00001610   Data           4  connect4.o(.constdata)
+    hLine                                    0x00001614   Data         157  connect4.o(.constdata)
+    vvLine                                   0x000016b1   Data         269  connect4.o(.constdata)
+    pxl                                      0x000017be   Data         129  connect4.o(.constdata)
+    pl1coin                                  0x0000183f   Data         133  connect4.o(.constdata)
+    pl2coin                                  0x000018c4   Data         133  connect4.o(.constdata)
+    arrow                                    0x00001949   Data         133  connect4.o(.constdata)
+    coinPadding                              0x000019d0   Data           4  connect4.o(.constdata)
+    NoInputMsg                               0x000019d4   Data          40  texas.o(.constdata)
+    OutputPortMsg0                           0x000019fc   Data          40  texas.o(.constdata)
+    OutputPortMsg1                           0x00001a24   Data          40  texas.o(.constdata)
+    OutputPortMsg2                           0x00001a4c   Data          40  texas.o(.constdata)
+    OutputPortMsg3                           0x00001a74   Data          40  texas.o(.constdata)
+    BlankMsg                                 0x00001a9c   Data          40  texas.o(.constdata)
+    InitializedMsg                           0x00001ac4   Data          40  texas.o(.constdata)
+    IntroMsg                                 0x00001aec   Data          40  texas.o(.constdata)
+    DoneMsg                                  0x00001b14   Data          40  texas.o(.constdata)
+    Region$$Table$$Base                      0x00001b3c   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x00001b5c   Number         0  anon$$obj.o(Region$$Table)
     leftMargin                               0x20000000   Data           4  connect4.o(.data)
     topMargin                                0x20000004   Data           4  connect4.o(.data)
-    TExaS_Period                             0x20000008   Data           4  texas.o(.data)
-    TExaS_Ports                              0x2000000c   Data           8  texas.o(.data)
-    Display                                  0x20000014   Data           1  texas.o(.data)
-    TExaS_Meter                              0x20000018   Data           4  texas.o(.data)
-    ADCnum                                   0x2000001c   Data           4  texas.o(.data)
-    LastMode                                 0x20000020   Data           4  texas.o(.data)
-    bFlag                                    0x20000024   Data           4  texas.o(.data)
-    Count                                    0x20000028   Data           4  texas.o(.data)
-    DelayBetweenTests                        0x2000002c   Data           4  texas.o(.data)
-    TExaS_Test                               0x20000030   Data           4  texas.o(.data)
-    ScopeMode                                0x20000034   Data           4  texas.o(.data)
-    ScopeCount                               0x20000038   Data           4  texas.o(.data)
-    Screen                                   0x20000040   Data         504  nokia5110.o(.bss)
-    cellPositions                            0x20000238   Data         144  connect4.o(.bss)
-    pl1c                                     0x200002c8   Data          16  connect4.o(.bss)
-    pl2c                                     0x200002d8   Data          16  connect4.o(.bss)
-    TExaS                                    0x200002e8   Data          56  texas.o(.bss)
-    __libspace_start                         0x20000320   Data          96  libspace.o(.bss)
-    __temporary_stack_top$libspace           0x20000380   Data           0  libspace.o(.bss)
+    fullGridH                                0x20000008   Data           4  connect4.o(.data)
+    fullGridW                                0x2000000c   Data           4  connect4.o(.data)
+    turn                                     0x20000010   Data           4  connect4.o(.data)
+    cellCenX                                 0x20000014   Data           4  connect4.o(.data)
+    cellCenY                                 0x20000018   Data           4  connect4.o(.data)
+    i                                        0x2000001c   Data           4  connect4.o(.data)
+    j                                        0x20000020   Data           4  connect4.o(.data)
+    TExaS_Period                             0x20000024   Data           4  texas.o(.data)
+    TExaS_Ports                              0x20000028   Data           8  texas.o(.data)
+    Display                                  0x20000030   Data           1  texas.o(.data)
+    TExaS_Meter                              0x20000034   Data           4  texas.o(.data)
+    ADCnum                                   0x20000038   Data           4  texas.o(.data)
+    LastMode                                 0x2000003c   Data           4  texas.o(.data)
+    bFlag                                    0x20000040   Data           4  texas.o(.data)
+    Count                                    0x20000044   Data           4  texas.o(.data)
+    DelayBetweenTests                        0x20000048   Data           4  texas.o(.data)
+    TExaS_Test                               0x2000004c   Data           4  texas.o(.data)
+    ScopeMode                                0x20000050   Data           4  texas.o(.data)
+    ScopeCount                               0x20000054   Data           4  texas.o(.data)
+    Screen                                   0x2000005c   Data         504  nokia5110.o(.bss)
+    cellPositions                            0x20000254   Data         336  connect4.o(.bss)
+    pl1c                                     0x200003a4   Data          16  connect4.o(.bss)
+    pl2c                                     0x200003b4   Data          16  connect4.o(.bss)
+    TExaS                                    0x200003c8   Data          56  texas.o(.bss)
+    __libspace_start                         0x20000400   Data          96  libspace.o(.bss)
+    __temporary_stack_top$libspace           0x20000460   Data           0  libspace.o(.bss)
 
 
 
@@ -634,70 +713,70 @@ Memory Map of the image
 
   Image Entry point : 0x0000026d
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x00001458, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00001bb8, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Base: 0x00000000, Size: 0x00001418, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Base: 0x00000000, Size: 0x00001b5c, Max: 0xffffffff, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x00000000   0x00000284   Code   RO            3  * RESET               startup.o
-    0x00000284   0x00000008   Code   RO          312  * !!!main             c_w.l(__main.o)
-    0x0000028c   0x00000034   Code   RO          466    !!!scatter          c_w.l(__scatter.o)
-    0x000002c0   0x0000001a   Code   RO          468    !!handler_copy      c_w.l(__scatter_copy.o)
+    0x00000284   0x00000008   Code   RO          316  * !!!main             c_w.l(__main.o)
+    0x0000028c   0x00000034   Code   RO          495    !!!scatter          c_w.l(__scatter.o)
+    0x000002c0   0x0000001a   Code   RO          497    !!handler_copy      c_w.l(__scatter_copy.o)
     0x000002da   0x00000002   PAD
-    0x000002dc   0x0000001c   Code   RO          470    !!handler_zi        c_w.l(__scatter_zi.o)
-    0x000002f8   0x00000002   Code   RO          339    .ARM.Collect$$libinit$$00000000  c_w.l(libinit.o)
-    0x000002fa   0x00000000   Code   RO          346    .ARM.Collect$$libinit$$00000002  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          349    .ARM.Collect$$libinit$$00000008  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          351    .ARM.Collect$$libinit$$0000000A  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          353    .ARM.Collect$$libinit$$0000000C  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          356    .ARM.Collect$$libinit$$0000000F  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          358    .ARM.Collect$$libinit$$00000011  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          360    .ARM.Collect$$libinit$$00000013  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          362    .ARM.Collect$$libinit$$00000015  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          364    .ARM.Collect$$libinit$$00000017  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          366    .ARM.Collect$$libinit$$00000019  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          368    .ARM.Collect$$libinit$$0000001B  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          370    .ARM.Collect$$libinit$$0000001D  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          372    .ARM.Collect$$libinit$$0000001F  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          374    .ARM.Collect$$libinit$$00000021  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          376    .ARM.Collect$$libinit$$00000023  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          380    .ARM.Collect$$libinit$$0000002A  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          382    .ARM.Collect$$libinit$$0000002C  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          384    .ARM.Collect$$libinit$$0000002E  c_w.l(libinit2.o)
-    0x000002fa   0x00000000   Code   RO          386    .ARM.Collect$$libinit$$00000030  c_w.l(libinit2.o)
-    0x000002fa   0x00000002   Code   RO          387    .ARM.Collect$$libinit$$00000031  c_w.l(libinit2.o)
-    0x000002fc   0x00000002   Code   RO          407    .ARM.Collect$$libshutdown$$00000000  c_w.l(libshutdown.o)
-    0x000002fe   0x00000000   Code   RO          421    .ARM.Collect$$libshutdown$$00000003  c_w.l(libshutdown2.o)
-    0x000002fe   0x00000000   Code   RO          424    .ARM.Collect$$libshutdown$$00000006  c_w.l(libshutdown2.o)
-    0x000002fe   0x00000000   Code   RO          427    .ARM.Collect$$libshutdown$$00000009  c_w.l(libshutdown2.o)
-    0x000002fe   0x00000000   Code   RO          429    .ARM.Collect$$libshutdown$$0000000B  c_w.l(libshutdown2.o)
-    0x000002fe   0x00000000   Code   RO          432    .ARM.Collect$$libshutdown$$0000000E  c_w.l(libshutdown2.o)
-    0x000002fe   0x00000002   Code   RO          433    .ARM.Collect$$libshutdown$$0000000F  c_w.l(libshutdown2.o)
-    0x00000300   0x00000000   Code   RO          314    .ARM.Collect$$rtentry$$00000000  c_w.l(rtentry.o)
-    0x00000300   0x00000000   Code   RO          316    .ARM.Collect$$rtentry$$00000002  c_w.l(rtentry2.o)
-    0x00000300   0x00000006   Code   RO          328    .ARM.Collect$$rtentry$$00000004  c_w.l(rtentry4.o)
-    0x00000306   0x00000000   Code   RO          318    .ARM.Collect$$rtentry$$00000009  c_w.l(rtentry2.o)
-    0x00000306   0x00000004   Code   RO          319    .ARM.Collect$$rtentry$$0000000A  c_w.l(rtentry2.o)
-    0x0000030a   0x00000000   Code   RO          321    .ARM.Collect$$rtentry$$0000000C  c_w.l(rtentry2.o)
-    0x0000030a   0x00000008   Code   RO          322    .ARM.Collect$$rtentry$$0000000D  c_w.l(rtentry2.o)
-    0x00000312   0x00000002   Code   RO          343    .ARM.Collect$$rtexit$$00000000  c_w.l(rtexit.o)
-    0x00000314   0x00000000   Code   RO          389    .ARM.Collect$$rtexit$$00000002  c_w.l(rtexit2.o)
-    0x00000314   0x00000004   Code   RO          390    .ARM.Collect$$rtexit$$00000003  c_w.l(rtexit2.o)
-    0x00000318   0x00000006   Code   RO          391    .ARM.Collect$$rtexit$$00000004  c_w.l(rtexit2.o)
+    0x000002dc   0x0000001c   Code   RO          499    !!handler_zi        c_w.l(__scatter_zi.o)
+    0x000002f8   0x00000002   Code   RO          366    .ARM.Collect$$libinit$$00000000  c_w.l(libinit.o)
+    0x000002fa   0x00000000   Code   RO          375    .ARM.Collect$$libinit$$00000002  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          378    .ARM.Collect$$libinit$$00000008  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          380    .ARM.Collect$$libinit$$0000000A  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          382    .ARM.Collect$$libinit$$0000000C  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          385    .ARM.Collect$$libinit$$0000000F  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          387    .ARM.Collect$$libinit$$00000011  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          389    .ARM.Collect$$libinit$$00000013  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          391    .ARM.Collect$$libinit$$00000015  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          393    .ARM.Collect$$libinit$$00000017  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          395    .ARM.Collect$$libinit$$00000019  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          397    .ARM.Collect$$libinit$$0000001B  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          399    .ARM.Collect$$libinit$$0000001D  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          401    .ARM.Collect$$libinit$$0000001F  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          403    .ARM.Collect$$libinit$$00000021  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          405    .ARM.Collect$$libinit$$00000023  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          409    .ARM.Collect$$libinit$$0000002A  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          411    .ARM.Collect$$libinit$$0000002C  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          413    .ARM.Collect$$libinit$$0000002E  c_w.l(libinit2.o)
+    0x000002fa   0x00000000   Code   RO          415    .ARM.Collect$$libinit$$00000030  c_w.l(libinit2.o)
+    0x000002fa   0x00000002   Code   RO          416    .ARM.Collect$$libinit$$00000031  c_w.l(libinit2.o)
+    0x000002fc   0x00000002   Code   RO          436    .ARM.Collect$$libshutdown$$00000000  c_w.l(libshutdown.o)
+    0x000002fe   0x00000000   Code   RO          450    .ARM.Collect$$libshutdown$$00000003  c_w.l(libshutdown2.o)
+    0x000002fe   0x00000000   Code   RO          453    .ARM.Collect$$libshutdown$$00000006  c_w.l(libshutdown2.o)
+    0x000002fe   0x00000000   Code   RO          456    .ARM.Collect$$libshutdown$$00000009  c_w.l(libshutdown2.o)
+    0x000002fe   0x00000000   Code   RO          458    .ARM.Collect$$libshutdown$$0000000B  c_w.l(libshutdown2.o)
+    0x000002fe   0x00000000   Code   RO          461    .ARM.Collect$$libshutdown$$0000000E  c_w.l(libshutdown2.o)
+    0x000002fe   0x00000002   Code   RO          462    .ARM.Collect$$libshutdown$$0000000F  c_w.l(libshutdown2.o)
+    0x00000300   0x00000000   Code   RO          332    .ARM.Collect$$rtentry$$00000000  c_w.l(rtentry.o)
+    0x00000300   0x00000000   Code   RO          341    .ARM.Collect$$rtentry$$00000002  c_w.l(rtentry2.o)
+    0x00000300   0x00000006   Code   RO          353    .ARM.Collect$$rtentry$$00000004  c_w.l(rtentry4.o)
+    0x00000306   0x00000000   Code   RO          343    .ARM.Collect$$rtentry$$00000009  c_w.l(rtentry2.o)
+    0x00000306   0x00000004   Code   RO          344    .ARM.Collect$$rtentry$$0000000A  c_w.l(rtentry2.o)
+    0x0000030a   0x00000000   Code   RO          346    .ARM.Collect$$rtentry$$0000000C  c_w.l(rtentry2.o)
+    0x0000030a   0x00000008   Code   RO          347    .ARM.Collect$$rtentry$$0000000D  c_w.l(rtentry2.o)
+    0x00000312   0x00000002   Code   RO          372    .ARM.Collect$$rtexit$$00000000  c_w.l(rtexit.o)
+    0x00000314   0x00000000   Code   RO          418    .ARM.Collect$$rtexit$$00000002  c_w.l(rtexit2.o)
+    0x00000314   0x00000004   Code   RO          419    .ARM.Collect$$rtexit$$00000003  c_w.l(rtexit2.o)
+    0x00000318   0x00000006   Code   RO          420    .ARM.Collect$$rtexit$$00000004  c_w.l(rtexit2.o)
     0x0000031e   0x00000002   PAD
     0x00000320   0x00000030   Code   RO            4    .text               startup.o
     0x00000350   0x00000028   Code   RO           92    .text               random.o
-    0x00000378   0x00000006   Code   RO          310    .text               c_w.l(heapauxi.o)
-    0x0000037e   0x0000004a   Code   RO          330    .text               c_w.l(sys_stackheap_outer.o)
-    0x000003c8   0x0000000c   Code   RO          332    .text               c_w.l(exit.o)
-    0x000003d4   0x00000008   Code   RO          340    .text               c_w.l(libspace.o)
-    0x000003dc   0x0000000c   Code   RO          399    .text               c_w.l(sys_exit.o)
-    0x000003e8   0x00000002   Code   RO          410    .text               c_w.l(use_no_semi.o)
-    0x000003ea   0x00000000   Code   RO          412    .text               c_w.l(indicate_semi.o)
+    0x00000378   0x00000006   Code   RO          314    .text               c_w.l(heapauxi.o)
+    0x0000037e   0x0000004a   Code   RO          357    .text               c_w.l(sys_stackheap_outer.o)
+    0x000003c8   0x0000000c   Code   RO          359    .text               c_w.l(exit.o)
+    0x000003d4   0x00000008   Code   RO          369    .text               c_w.l(libspace.o)
+    0x000003dc   0x0000000c   Code   RO          428    .text               c_w.l(sys_exit.o)
+    0x000003e8   0x00000002   Code   RO          439    .text               c_w.l(use_no_semi.o)
+    0x000003ea   0x00000000   Code   RO          441    .text               c_w.l(indicate_semi.o)
     0x000003ea   0x00000002   PAD
-    0x000003ec   0x0000000c   Code   RO          147    i.ADC1_In           texas.o
-    0x000003f8   0x000000d4   Code   RO          148    i.ADC1_Init         texas.o
+    0x000003ec   0x0000000c   Code   RO          151    i.ADC1_In           texas.o
+    0x000003f8   0x000000d4   Code   RO          152    i.ADC1_Init         texas.o
     0x000004cc   0x00000060   Code   RO           96    i.DrawGrid          connect4.o
     0x0000052c   0x00000018   Code   RO           13    i.Nokia5110_ClearBuffer  nokia5110.o
     0x00000544   0x00000010   Code   RO           14    i.Nokia5110_DisplayBuffer  nokia5110.o
@@ -706,42 +785,56 @@ Memory Map of the image
     0x00000578   0x0000016c   Code   RO           16    i.Nokia5110_Init    nokia5110.o
     0x000006e4   0x000001a8   Code   RO           20    i.Nokia5110_PrintBMP  nokia5110.o
     0x0000088c   0x00000030   Code   RO           21    i.Nokia5110_SetCursor  nokia5110.o
-    0x000008bc   0x0000007c   Code   RO          149    i.PLL_Init          texas.o
-    0x00000938   0x00000018   Code   RO          150    i.SetCode           texas.o
-    0x00000950   0x00000018   Code   RO          151    i.SetCourse         texas.o
-    0x00000968   0x000001c4   Code   RO          155    i.TExaS_Init        texas.o
-    0x00000b2c   0x00000020   Code   RO          157    i.Timer4A_Handler   texas.o
-    0x00000b4c   0x00000030   Code   RO          158    i.Timer5A_Handler   texas.o
-    0x00000b7c   0x000000c0   Code   RO          161    i.UART0_Init        texas.o
-    0x00000c3c   0x00000006   Code   RO           97    i.draw              connect4.o
-    0x00000c42   0x00000002   PAD
-    0x00000c44   0x00000014   Code   RO           98    i.gameInit          connect4.o
-    0x00000c58   0x0000004c   Code   RO           22    i.lcdwrite          nokia5110.o
-    0x00000ca4   0x00000034   Code   RO           99    i.main              connect4.o
-    0x00000cd8   0x000005b8   Data   RO          101    .constdata          connect4.o
-    0x00001290   0x00000168   Data   RO          166    .constdata          texas.o
-    0x000013f8   0x00000020   Data   RO          464    Region$$Table       anon$$obj.o
+    0x000008bc   0x0000007c   Code   RO          153    i.PLL_Init          texas.o
+    0x00000938   0x00000018   Code   RO          154    i.SetCode           texas.o
+    0x00000950   0x00000018   Code   RO          155    i.SetCourse         texas.o
+    0x00000968   0x000001c4   Code   RO          159    i.TExaS_Init        texas.o
+    0x00000b2c   0x00000020   Code   RO          161    i.Timer4A_Handler   texas.o
+    0x00000b4c   0x00000030   Code   RO          162    i.Timer5A_Handler   texas.o
+    0x00000b7c   0x000000c0   Code   RO          165    i.UART0_Init        texas.o
+    0x00000c3c   0x000000dc   Code   RO          329    i.ceil              m_ws.l(ceil.o)
+    0x00000d18   0x00000006   Code   RO           97    i.draw              connect4.o
+    0x00000d1e   0x00000002   PAD
+    0x00000d20   0x0000013c   Code   RO           98    i.gameInit          connect4.o
+    0x00000e5c   0x0000004c   Code   RO           22    i.lcdwrite          nokia5110.o
+    0x00000ea8   0x00000034   Code   RO           99    i.main              connect4.o
+    0x00000edc   0x00000150   Code   RO          318    x$fpl$dadd          fz_ws.l(daddsub_clz.o)
+    0x0000102c   0x00000018   Code   RO          367    x$fpl$dcmpinf       fz_ws.l(dcmpi.o)
+    0x00001044   0x0000005e   Code   RO          324    x$fpl$dfix          fz_ws.l(dfix.o)
+    0x000010a2   0x00000002   PAD
+    0x000010a4   0x00000078   Code   RO          355    x$fpl$dleqf         fz_ws.l(dleqf.o)
+    0x0000111c   0x0000009c   Code   RO          333    x$fpl$dnaninf       fz_ws.l(dnaninf.o)
+    0x000011b8   0x0000000c   Code   RO          335    x$fpl$dretinf       fz_ws.l(dretinf.o)
+    0x000011c4   0x0000006c   Code   RO          337    x$fpl$drleqf        fz_ws.l(drleqf.o)
+    0x00001230   0x00000016   Code   RO          319    x$fpl$drsb          fz_ws.l(daddsub_clz.o)
+    0x00001246   0x00000002   PAD
+    0x00001248   0x000001d4   Code   RO          320    x$fpl$dsub          fz_ws.l(daddsub_clz.o)
+    0x0000141c   0x00000000   Code   RO          339    x$fpl$usenofp       fz_ws.l(usenofp.o)
+    0x0000141c   0x000005b8   Data   RO          101    .constdata          connect4.o
+    0x000019d4   0x00000168   Data   RO          170    .constdata          texas.o
+    0x00001b3c   0x00000020   Data   RO          493    Region$$Table       anon$$obj.o
 
 
-    Execution Region ER_RW (Base: 0x20000000, Size: 0x00000040, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Base: 0x20000000, Size: 0x0000005c, Max: 0xffffffff, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x00000008   Data   RW          102    .data               connect4.o
-    0x20000008   0x00000034   Data   RW          167    .data               texas.o
-    0x2000003c   0x00000004   Data   RW           91    DATA                random.o
+    0x20000000   0x00000024   Data   RW          102    .data               connect4.o
+    0x20000024   0x00000034   Data   RW          171    .data               texas.o
+    0x20000058   0x00000004   Data   RW           91    DATA                random.o
 
 
-    Execution Region ER_ZI (Base: 0x20000040, Size: 0x00000740, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Base: 0x2000005c, Size: 0x00000804, Max: 0xffffffff, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000040   0x000001f8   Zero   RW           23    .bss                nokia5110.o
-    0x20000238   0x000000b0   Zero   RW          100    .bss                connect4.o
-    0x200002e8   0x00000038   Zero   RW          165    .bss                texas.o
-    0x20000320   0x00000060   Zero   RW          341    .bss                c_w.l(libspace.o)
-    0x20000380   0x00000000   Zero   RW            2    HEAP                startup.o
-    0x20000380   0x00000400   Zero   RW            1    STACK               startup.o
+    0x2000005c   0x000001f8   Zero   RW           23    .bss                nokia5110.o
+    0x20000254   0x00000170   Zero   RW          100    .bss                connect4.o
+    0x200003c4   0x00000004   PAD
+    0x200003c8   0x00000038   Zero   RW          169    .bss                texas.o
+    0x20000400   0x00000060   Zero   RW          370    .bss                c_w.l(libspace.o)
+    0x20000460   0x00000000   Zero   RW            2    HEAP                startup.o
+    0x20000460   0x00000400   Zero   RW            1    STACK               startup.o
 
 
 ==============================================================================
@@ -751,16 +844,16 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       174         26       1464          8        176       2986   connect4.o
+       470         72       1464         36        368       3337   connect4.o
        986         72          0          0        504       7265   nokia5110.o
         40         12          0          4          0        176   random.o
        692        632          0          0       1024        876   startup.o
       1120        244        360         52         56      15436   texas.o
 
     ----------------------------------------------------------------------
-      3016        986       1856         64       1760      26739   Object Totals
+      3312       1032       1856         92       1956      27090   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-         4          0          0          0          0          0   (incl. Padding)
+         4          0          0          0          4          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -786,19 +879,30 @@ Image component sizes
         12          4          0          0          0         68   sys_exit.o
         74          0          0          0          0         80   sys_stackheap_outer.o
          2          0          0          0          0         68   use_no_semi.o
+       826         16          0          0          0        348   daddsub_clz.o
+        24          0          0          0          0         68   dcmpi.o
+        94          4          0          0          0         92   dfix.o
+       120          4          0          0          0         92   dleqf.o
+       156          4          0          0          0         92   dnaninf.o
+        12          0          0          0          0         68   dretinf.o
+       108          0          0          0          0         80   drleqf.o
+         0          0          0          0          0          0   usenofp.o
+       220         16          0          0          0         84   ceil.o
 
     ----------------------------------------------------------------------
-       272         16          0          0         96        576   Library Totals
-         6          0          0          0          0          0   (incl. Padding)
+      1836         60          0          0         96       1500   Library Totals
+        10          0          0          0          0          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Library Name
 
        266         16          0          0         96        576   c_w.l
+      1340         28          0          0          0        840   fz_ws.l
+       220         16          0          0          0         84   m_ws.l
 
     ----------------------------------------------------------------------
-       272         16          0          0         96        576   Library Totals
+      1836         60          0          0         96       1500   Library Totals
 
     ----------------------------------------------------------------------
 
@@ -807,15 +911,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      3288       1002       1856         64       1856      26171   Grand Totals
-      3288       1002       1856         64       1856      26171   ELF Image Totals
-      3288       1002       1856         64          0          0   ROM Totals
+      5148       1092       1856         92       2052      26926   Grand Totals
+      5148       1092       1856         92       2052      26926   ELF Image Totals
+      5148       1092       1856         92          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 5144 (   5.02kB)
-    Total RW  Size (RW Data + ZI Data)              1920 (   1.88kB)
-    Total ROM Size (Code + RO Data + RW Data)       5208 (   5.09kB)
+    Total RO  Size (Code + RO Data)                 7004 (   6.84kB)
+    Total RW  Size (RW Data + ZI Data)              2144 (   2.09kB)
+    Total ROM Size (Code + RO Data + RW Data)       7096 (   6.93kB)
 
 ==============================================================================
 

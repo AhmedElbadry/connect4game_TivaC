@@ -1,6 +1,7 @@
 
 #include <stdio.h>  
 #include "UARTIO.h"
+#include <math.h>
 
 #include "tm4c123gh6pm.h"
 #include "Nokia5110.h"
@@ -15,17 +16,70 @@ int const vLineW = 2;
 int const numOfCol = 7;
 int const numOfRow = 6;
 int const coinPadding;
-int leftMargin = 0;
-int topMargin = 0;
-int cellPositions[numOfRow][numOfRow];
+int leftMargin;
+int topMargin;
+int fullGridH;
+int fullGridW;
+int turn;
+int cellCenX;
+int cellCenY;
 
 
+int i;
+int	j;
 
+
+struct xyPts{
+	int x;
+	int y;
+};
+
+
+struct xyPts cellPositions[numOfRow][numOfCol];
+
+
+struct coin {
+	int x;
+	int y;
+	const unsigned char *image;
+	
+	void (*draw)(struct coin*);
+};
+
+void draw(struct coin* c){
+	
+	(*c).x = 5;
+	
+}
 
 
 void gameInit(){
-	leftMargin = (SCREENW - (cellW * numOfCol + vLineW*(numOfCol+1)))/2;
-	topMargin = SCREENH - (cellH*numOfRow +  vLineW*numOfRow);
+	
+	//the grid dimintions
+	fullGridW = (cellW * numOfCol + vLineW*(numOfCol+1));
+	fullGridH = (cellH*numOfRow +  vLineW*numOfRow);
+	
+	
+	//get margins
+	leftMargin = (SCREENW - fullGridW)/2;
+	topMargin = SCREENH - fullGridH;
+	
+	//individual cell center
+	cellCenX = vLineW + ceil((double)cellW/2);
+	cellCenY = hLineW + ceil((double)cellH/2);
+	
+	
+	//calculate center position of each cell
+	for(i = 0; i < numOfRow; i++){
+		for(j = 0; j < numOfCol; j++){
+			cellPositions[numOfRow - 1 - i][j].x = leftMargin + j*(cellW + vLineW) + cellCenX;
+			cellPositions[numOfRow - 1 - i][j].y = SCREENH - 1 - (i*(cellH + hLineW) + cellCenY);
+		}
+	}
+	
+	//initialize the turn
+	turn = 0;
+	
 }
 
 const unsigned char hLine[] ={
@@ -88,26 +142,6 @@ const unsigned char arrow[] ={
  0xFC, 0x00, 0x00, 0x00, 0xFF,
 
 };
-
-
-
-struct coin {
-	int x;
-	int y;
-	const unsigned char *image;
-	
-	void (*draw)(struct coin*);
-};
-
-void draw(struct coin* c){
-	
-	(*c).x = 5;
-	
-}
-
-
-
-
 
 
 
