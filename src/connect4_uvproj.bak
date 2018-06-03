@@ -430,6 +430,11 @@
               <FileType>1</FileType>
               <FilePath>.\TExaS.c</FilePath>
             </File>
+            <File>
+              <FileName>UARTIO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UARTIO.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

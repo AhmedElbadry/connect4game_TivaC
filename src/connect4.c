@@ -37,7 +37,7 @@ int colCenter[numOfCol]; //each column center on x axis
 int playerPos; //position of the player coin before playing
 int winner; // who is the winner
 int gameMode; // 0: menu, 1: 2players, 2: 1player vs ai,  3: ai vs ai
-
+int menuCursor;
 int i;
 int	j;
 
@@ -275,6 +275,8 @@ int isThereAwinner(){
 unsigned int SW1;
 unsigned int SW2;
 
+
+
 int main(void){
 	//UART_Init();
   TExaS_Init(SSI0_Real_Nokia5110_Scope);  // set system clock to 80 MHz
@@ -290,7 +292,8 @@ int main(void){
 	
 	//this variable should be removed
 	//it should be set in the menu part by the user
-	gameMode = 1;
+	gameMode = 0;
+	menuCursor = 0;
 	
   while(1){
 		Nokia5110_ClearBuffer();
@@ -300,11 +303,43 @@ int main(void){
 		if(gameMode == 0){
 			//menu code should be here
 			Nokia5110_Clear();
-			Nokia5110_SetCursor(1, 1);
-			Nokia5110_OutString("menu");
+			Nokia5110_SetCursor(4, 0);
+			Nokia5110_OutString("MENU");
+			Nokia5110_SetCursor(2, 2);
+			Nokia5110_OutString("P1 vs P2");
+			Nokia5110_SetCursor(2, 3);
+			Nokia5110_OutString("P1 vs AI");			
+			Nokia5110_SetCursor(2, 4);
+			Nokia5110_OutString("AI vs AI");
+			
+			Nokia5110_SetCursor( 0 , menuCursor + 2);
+			Nokia5110_OutString(">>"); 
+			//wait for an input
+				while(SW1 && SW2){
+					SW1 = GPIO_PORTF_DATA_R&0x10;
+					SW2 = GPIO_PORTF_DATA_R&0x01;
+				};
+			//move down in menu	
+			if(!SW1){
+				while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
+				menuCursor = (menuCursor + 1) % 3;
+			}
+			//move up in menu
+			else if(!SW2){
+				while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
+				gameMode = menuCursor + 1 ;
+				continue;
+				
+
+			}
+			Nokia5110_SetCursor( 0 ,menuCursor + 2);
+			Nokia5110_OutString(">>"); 
+			 
 			
 			
+				
 		}
+		//2 players on the same kit
 		else if(gameMode == 1){
 		
 			if(turn > lastTurn){
