@@ -40,6 +40,8 @@ int gameMode; // 0: menu, 1: 2players, 2: 1player vs ai,  3: ai vs ai
 int menuCursor;
 int i;
 int	j;
+int kitsNum;
+int isMaster;
 
 //this structure describes each individual cell
 //(x, y) are the center point of a cell
@@ -293,6 +295,9 @@ int main(void){
 	gameMode = 0;
 	menuCursor = 0;
 	
+	
+	//kitsNum
+	//isMaster
   while(1){
 		Nokia5110_ClearBuffer();
 		SW1 = GPIO_PORTF_DATA_R&0x10;
