@@ -290,8 +290,6 @@ int main(void){
 	
 	
 	
-	//this variable should be removed
-	//it should be set in the menu part by the user
 	gameMode = 0;
 	menuCursor = 0;
 	
@@ -301,7 +299,7 @@ int main(void){
 		SW2 = GPIO_PORTF_DATA_R&0x01;
 		
 		if(gameMode == 0){
-			//menu code should be here
+			//menu code 
 			Nokia5110_Clear();
 			Nokia5110_SetCursor(4, 0);
 			Nokia5110_OutString("MENU");
@@ -324,7 +322,7 @@ int main(void){
 				while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
 				menuCursor = (menuCursor + 1) % 3;
 			}
-			//move up in menu
+			//choose selection
 			else if(!SW2){
 				while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
 				gameMode = menuCursor + 1 ;
@@ -402,11 +400,109 @@ int main(void){
 					}
 				}
 				
-			}else if (gameMode == 2){
+			}
+		//player vs AI
+		else if (gameMode == 2){
+				
+			if(turn > lastTurn){
+				playerPos = 0;
+				lastTurn = turn;
+			}
+			update();
+			winner = isThereAwinner();
+			if(winner){
+				Nokia5110_ClearBuffer();
+				Nokia5110_DisplayBuffer();
 				Nokia5110_Clear();
-				Nokia5110_SetCursor(1, 1);
-				Nokia5110_OutString("game mode 2");
-			}else if(gameMode == 3){
+				
+				if(winner == 1 ){
+					Nokia5110_Clear();
+					Nokia5110_SetCursor(1, 1);
+					Nokia5110_OutString("Player one wins");
+				}
+				else{
+					Nokia5110_Clear();
+					Nokia5110_SetCursor(1, 1);
+					Nokia5110_OutString("Player two wins");
+				}
+				break;
+			}
+
+			
+
+				
+				//wait for an input
+				while(SW1 && SW2){
+					SW1 = GPIO_PORTF_DATA_R&0x10;
+					SW2 = GPIO_PORTF_DATA_R&0x01;
+				};
+				
+				//player1 turn
+				if(!turn%2){
+						//SW1 on release, move to the next position
+						if(!SW1){
+							
+							//wait untill SW1 is released
+							while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
+							playerPos = (playerPos + 1)%numOfCol;
+							
+							//turn = 0; turn%2 = 0; first player >> turn/2 = 0; first coin
+							//turn = 1; turn%2 = 1; second player >> turn/2 = 0; first coin
+							//turn = 2; turn%2 = 0; first player >> turn/2 = 1; second coin
+							//turn = 3; turn%2 = 1; second player >> turn/2 = 1; second coin
+							playersCoins[turn%2][turn/2].x = colCenter[playerPos];
+						}
+						
+						//SW2 on release, place the coin in the column if possible
+						if(!SW2){
+							//wait untill SW2 is released
+							while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
+							
+							if(colCoins[playerPos] < numOfRow){
+								theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].player = turn%2 + 1;
+								playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].y;
+								colCoins[playerPos]++;
+								turn++;
+							}
+						}
+					}
+				//AI turn
+			if(turn%2){
+						//SW1 on release, move to the next position
+						if(!SW1){
+							
+							//wait untill SW1 is released
+							while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
+							playerPos = (playerPos + 1)%numOfCol;
+							
+							//turn = 0; turn%2 = 0; first player >> turn/2 = 0; first coin
+							//turn = 1; turn%2 = 1; second player >> turn/2 = 0; first coin
+							//turn = 2; turn%2 = 0; first player >> turn/2 = 1; second coin
+							//turn = 3; turn%2 = 1; second player >> turn/2 = 1; second coin
+							playersCoins[turn%2][turn/2].x = colCenter[playerPos];
+						}
+						
+						//SW2 on release, place the coin in the column if possible
+						if(!SW2){
+							//wait untill SW2 is released
+							while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
+							
+							if(colCoins[playerPos] < numOfRow){
+								theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].player = turn%2 + 1;
+								playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].y;
+								colCoins[playerPos]++;
+								turn++;
+							}
+						}
+					}
+			
+			}
+		
+			
+			
+			
+		//AI vs AI
+			else if(gameMode == 3){
 				Nokia5110_Clear();
 				Nokia5110_SetCursor(1, 1);
 				Nokia5110_OutString("game mode 3");
