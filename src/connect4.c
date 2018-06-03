@@ -37,6 +37,7 @@ int cellCoins[numOfCol]; //number of coins in each cell
 int colCenter[numOfCol]; //each column center on x axis
 int playerPos; //position of the player coin before playing
 int winner; // who is the winner
+int gameMode; // 0: menu, 1: 2players, 2: 1player vs ai,  3: ai vs ai
 
 int i;
 int	j;
@@ -145,6 +146,7 @@ void gameInit(){
 		colCenter[i] = leftMargin + i*(cellW + vLineW) + cellCenX;
 	}
 	
+	gameMode = 0;
 }
 
 
@@ -288,31 +290,44 @@ int main(void){
 	
 	
 
-	
+	gameMode = 1;
   while(1){
 		Nokia5110_ClearBuffer();
 		SW1 = GPIO_PORTF_DATA_R&0x10;
 		SW2 = GPIO_PORTF_DATA_R&0x01;
 		
-		if(turn > lastTurn){
-			playerPos = 0;
-			lastTurn = turn;
-		}
-		update();
-		winner = isThereAwinner();
-		if(winner){
-			Nokia5110_ClearBuffer();
-			Nokia5110_DisplayBuffer();
+		if(gameMode == 0){
 			Nokia5110_Clear();
 			Nokia5110_SetCursor(1, 1);
+			Nokia5110_OutString("menu");
 			
-			if(winner == 1 )
-				Nokia5110_OutString("Player one wins");
-			else
-				Nokia5110_OutString("Player two wins");
-			
-			break;
 		}
+		else if(gameMode == 1){
+		
+			if(turn > lastTurn){
+				playerPos = 0;
+				lastTurn = turn;
+			}
+			update();
+			winner = isThereAwinner();
+			if(winner){
+				Nokia5110_ClearBuffer();
+				Nokia5110_DisplayBuffer();
+				Nokia5110_Clear();
+				Nokia5110_SetCursor(1, 1);
+				
+				if(winner == 1 ){
+					Nokia5110_Clear();
+					Nokia5110_SetCursor(1, 1);
+					Nokia5110_OutString("Player one wins");
+				}
+				else{
+					Nokia5110_Clear();
+					Nokia5110_SetCursor(1, 1);
+					Nokia5110_OutString("Player two wins");
+				}
+				break;
+			}
 
 			
 
@@ -349,6 +364,16 @@ int main(void){
 						turn++;
 					}
 				}
+				
+			}else if (gameMode == 2){
+				Nokia5110_Clear();
+				Nokia5110_SetCursor(1, 1);
+				Nokia5110_OutString("game mode 2");
+			}else if(gameMode == 3){
+				Nokia5110_Clear();
+				Nokia5110_SetCursor(1, 1);
+				Nokia5110_OutString("game mode 3");
+			}
 				
 		
   }
