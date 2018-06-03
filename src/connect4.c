@@ -1,7 +1,6 @@
 
 #include <stdio.h>  
 #include "UARTIO.h"
-#include <math.h>
 
 #include "tm4c123gh6pm.h"
 #include "Nokia5110.h"
@@ -15,29 +14,29 @@ void PortF_Init(void);
 
 
 
-int const cellW = 8;
-int const cellH = 5;
-int const hLineW = 1;
-int const vLineW = 2;
-int const numOfCol = 7;
+int const cellW = 8; //cell width
+int const cellH = 5; //cell height
+int const hLineW = 1; //horizontal line width
+int const vLineW = 2; // vertical line width
+int const numOfCol = 7; 
 int const numOfRow = 6;
 int const numOfCoinsForEachPlayer = 21; // (numOfCol*numOfRow)/2
-int const coinPadding;
-int const coinH = 3;
-int const coinW = 6;
+int const coinPadding; //spacing in each cell
+int const coinH = 3; //cell height
+int const coinW = 6; //cell width
 
-int leftMargin;
-int topMargin;
-int fullGridH;
-int fullGridW;
-int turn;
-int lastTurn;
-int cellCenX;
-int cellCenY;
-int cellCoins[numOfCol];
-int colCenter[numOfCol];
-int playerPos;
-int winner;
+int leftMargin; //empty space on the left of the grid
+int topMargin; //empy space on the top of the grid
+int fullGridH; //grid height
+int fullGridW; //grid width
+int turn; //current turn
+int lastTurn; //turn in the previous loop
+int cellCenX; //half width of the cell
+int cellCenY; //half height of the cell
+int cellCoins[numOfCol]; //number of coins in each cell
+int colCenter[numOfCol]; //each column center on x axis
+int playerPos; //position of the player coin before playing
+int winner; // who is the winner
 
 int i;
 int	j;
@@ -53,11 +52,14 @@ struct cell{
 	int player;
 };
 
-
+//the full grid cells
 struct cell theGrid[numOfRow][numOfCol];
 
 
-
+//structure that describes the coins
+//(x, y) are the center point of a coin
+//image: the image of a coin
+//draw(): draws a coin at its position
 struct coin {
 	int x;
 	int y;
@@ -67,13 +69,14 @@ struct coin {
 };
 
 void draw(struct coin* c){
-	Nokia5110_PrintBMP((*c).x - coinW/2, (*c).y + ceil((double)coinH/2), (*c).image, 0);
+	Nokia5110_PrintBMP((*c).x - coinW/2, (*c).y + (coinH/2), (*c).image, 0);
 	
 }
 
 
-struct coin playerOneCoins[numOfCoinsForEachPlayer];
-struct coin playerTwoCoins[numOfCoinsForEachPlayer];
+//conis for each players
+//playersCoins[0]: first player
+//playersCoins[1]: second player
 struct coin playersCoins[2][numOfCoinsForEachPlayer];
 
 
@@ -91,8 +94,8 @@ void gameInit(){
 	topMargin = SCREENH - fullGridH;
 	
 	//individual cell center
-	cellCenX = vLineW + ceil((double)cellW/2);
-	cellCenY = hLineW + ceil((double)cellH/2);
+	cellCenX = vLineW + (cellW/2);
+	cellCenY = hLineW + (cellH/2);
 	
 	playerPos = 0;
 	
@@ -119,24 +122,17 @@ void gameInit(){
 		
 		//locate the coins on the top left of the grid and in the center of the 1st column
 		//player one
-		//playerOneCoins[i].x = leftMargin + cellCenX;
-		//playerOneCoins[i].y = SCREENH - 1 - fullGridH;
 		playersCoins[0][i].x = leftMargin + cellCenX;
 		playersCoins[0][i].y = SCREENH - 1 - fullGridH;
-		
 		//player two
-		//playerTwoCoins[i].x = leftMargin + cellCenX;
-		//playerTwoCoins[i].y = SCREENH - 1 - fullGridH;
 		playersCoins[1][i].x = leftMargin + cellCenX;
 		playersCoins[1][i].y = SCREENH - 1 - fullGridH;
 		
 		
 		//set the img for each player
 		//player one
-		//playerOneCoins[i].image = pl1coin;
-		//player two
-		//playerTwoCoins[i].image = pl2coin;
 		playersCoins[0][i].image = pl1coin;
+		//player two
 		playersCoins[1][i].image = pl2coin;
 		
 		
@@ -275,8 +271,8 @@ int isThereAwinner(){
 	return status ;
 }
 
-unsigned int SW1, flag1;
-unsigned int SW2, flag2;
+unsigned int SW1;
+unsigned int SW2;
 
 int main(void){
 	//UART_Init();
@@ -290,32 +286,8 @@ int main(void){
 	gameInit();
 	
 	
-	DrawGrid();
-	Nokia5110_DisplayBuffer(); 
-	//Nokia5110_PrintBMP(playerOneCoins[0].x, playerOneCoins[0].y, playerOneCoins[0].image, 0);
 	
-	//raw(&playerTwoCoins[0]);
-	/*
-	for(i = 0; i < numOfRow; i++){
-		for(j = 0; j < numOfCol; j++){
-			if(turn%2 == 0){
-				playerOneCoins[turn/2].x = theGrid[numOfRow - 1 - i][j].x;
-				playerOneCoins[turn/2].y = theGrid[numOfRow - 1 - i][j].y;
-				draw(&playerOneCoins[turn/2]);
-			}else{
-				playerTwoCoins[turn/2].x = theGrid[numOfRow - 1 - i][j].x;
-				playerTwoCoins[turn/2].y = theGrid[numOfRow - 1 - i][j].y;
-				draw(&playerTwoCoins[turn/2]);
-			}
-			Nokia5110_DisplayBuffer();
-			turn++;
-		}
-		
-	}*/
-	
-	
-	flag1 = 0;
-	flag2 = 0;
+
 	
   while(1){
 		Nokia5110_ClearBuffer();
@@ -341,17 +313,11 @@ int main(void){
 			
 			break;
 		}
-		//if it's player one turn
-		//if(turn % 2 == 0){
+
 			
-			//while(1){
 
 				
-				//draw player coin
-				//draw(&playersCoins[turn%2][turn/2]);
-				//draw grid
-				//DrawGrid();
-				
+				//wait for an input
 				while(SW1 && SW2){
 					SW1 = GPIO_PORTF_DATA_R&0x10;
 					SW2 = GPIO_PORTF_DATA_R&0x01;
@@ -363,6 +329,11 @@ int main(void){
 					//wait untill SW1 is released
 					while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
 					playerPos = (playerPos + 1)%numOfCol;
+					
+					//turn = 0; turn%2 = 0; first player >> turn/2 = 0; first coin
+					//turn = 1; turn%2 = 1; second player >> turn/2 = 0; first coin
+					//turn = 2; turn%2 = 0; first player >> turn/2 = 1; second coin
+					//turn = 3; turn%2 = 1; second player >> turn/2 = 1; second coin
 					playersCoins[turn%2][turn/2].x = colCenter[playerPos];
 				}
 				
@@ -379,9 +350,6 @@ int main(void){
 					}
 				}
 				
-			//}
-			
-		//}
 		
   }
 
