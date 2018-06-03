@@ -1,6 +1,7 @@
 
 #include <stdio.h>  
 #include "UARTIO.h"
+#include <stdlib.h>
 
 #include "tm4c123gh6pm.h"
 #include "Nokia5110.h"
@@ -441,7 +442,22 @@ int main(void){
 					SW1 = GPIO_PORTF_DATA_R&0x10;
 					SW2 = GPIO_PORTF_DATA_R&0x01;
 				};
-				
+					//AI turn
+			if(turn%2){
+				if (turn/2 == 0)
+				{
+					playerPos = rand() % 7;
+					playersCoins[turn%2][turn/2].x = colCenter[playerPos];
+					update();
+					if(colCoins[playerPos] < numOfRow){
+						theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].player = turn%2 + 1;
+						playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].y;
+						colCoins[playerPos]++;
+						turn++;
+					}
+				}
+					
+	}	
 				//player1 turn
 				if(!turn%2){
 						//SW1 on release, move to the next position
@@ -471,37 +487,8 @@ int main(void){
 							}
 						}
 					}
-				//AI turn
-			if(turn%2){
-						//SW1 on release, move to the next position
-						if(!SW1){
-							
-							//wait untill SW1 is released
-							while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
-							playerPos = (playerPos + 1)%numOfCol;
-							
-							//turn = 0; turn%2 = 0; first player >> turn/2 = 0; first coin
-							//turn = 1; turn%2 = 1; second player >> turn/2 = 0; first coin
-							//turn = 2; turn%2 = 0; first player >> turn/2 = 1; second coin
-							//turn = 3; turn%2 = 1; second player >> turn/2 = 1; second coin
-							playersCoins[turn%2][turn/2].x = colCenter[playerPos];
-						}
-						
-						//SW2 on release, place the coin in the column if possible
-						if(!SW2){
-							//wait untill SW2 is released
-							while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
-							
-							if(colCoins[playerPos] < numOfRow){
-								theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].player = turn%2 + 1;
-								playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].y;
-								colCoins[playerPos]++;
-								turn++;
-							}
-						}
-					}
-			
-			}
+					
+}
 		
 			
 			
