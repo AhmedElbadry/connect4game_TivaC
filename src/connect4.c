@@ -21,7 +21,6 @@ int const vLineW = 2; // vertical line width
 int const numOfCol = 7; 
 int const numOfRow = 6;
 int const numOfCoinsForEachPlayer = 21; // (numOfCol*numOfRow)/2
-int const coinPadding; //spacing in each cell
 int const coinH = 3; //cell height
 int const coinW = 6; //cell width
 
@@ -33,7 +32,7 @@ int turn; //current turn
 int lastTurn; //turn in the previous loop
 int cellCenX; //half width of the cell
 int cellCenY; //half height of the cell
-int cellCoins[numOfCol]; //number of coins in each cell
+int colCoins[numOfCol]; //number of coins in each column
 int colCenter[numOfCol]; //each column center on x axis
 int playerPos; //position of the player coin before playing
 int winner; // who is the winner
@@ -87,7 +86,7 @@ void gameInit(){
 	
 	//the grid dimintions
 	fullGridW = (cellW * numOfCol + vLineW*(numOfCol+1));
-	fullGridH = (cellH*numOfRow +  vLineW*numOfRow);
+	fullGridH = (cellH*numOfRow +  hLineW*numOfRow);
 	
 	
 	//get margins
@@ -124,10 +123,10 @@ void gameInit(){
 		//locate the coins on the top left of the grid and in the center of the 1st column
 		//player one
 		playersCoins[0][i].x = leftMargin + cellCenX;
-		playersCoins[0][i].y = SCREENH - 1 - fullGridH;
+		playersCoins[0][i].y = SCREENH - 1 - fullGridH - 3;
 		//player two
 		playersCoins[1][i].x = leftMargin + cellCenX;
-		playersCoins[1][i].y = SCREENH - 1 - fullGridH;
+		playersCoins[1][i].y = SCREENH - 1 - fullGridH - 3;
 		
 		
 		//set the img for each player
@@ -141,7 +140,7 @@ void gameInit(){
 	
 	//each column contains 0 coins at the begining
 	for(i = 0; i < numOfCol; i++){
-		cellCoins[i] = 0;
+		colCoins[i] = 0;
 		
 		colCenter[i] = leftMargin + i*(cellW + vLineW) + cellCenX;
 	}
@@ -289,17 +288,21 @@ int main(void){
 	
 	
 	
-
+	//this variable should be removed
+	//it should be set in the menu part by the user
 	gameMode = 1;
+	
   while(1){
 		Nokia5110_ClearBuffer();
 		SW1 = GPIO_PORTF_DATA_R&0x10;
 		SW2 = GPIO_PORTF_DATA_R&0x01;
 		
 		if(gameMode == 0){
+			//menu code should be here
 			Nokia5110_Clear();
 			Nokia5110_SetCursor(1, 1);
 			Nokia5110_OutString("menu");
+			
 			
 		}
 		else if(gameMode == 1){
@@ -314,7 +317,6 @@ int main(void){
 				Nokia5110_ClearBuffer();
 				Nokia5110_DisplayBuffer();
 				Nokia5110_Clear();
-				Nokia5110_SetCursor(1, 1);
 				
 				if(winner == 1 ){
 					Nokia5110_Clear();
@@ -357,10 +359,10 @@ int main(void){
 					//wait untill SW2 is released
 					while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
 					
-					if(cellCoins[playerPos] < numOfRow){
-						theGrid[numOfRow - 1 - cellCoins[playerPos]][playerPos].player = turn%2 + 1;
-						playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - cellCoins[playerPos]][playerPos].y;
-						cellCoins[playerPos]++;
+					if(colCoins[playerPos] < numOfRow){
+						theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].player = turn%2 + 1;
+						playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].y;
+						colCoins[playerPos]++;
 						turn++;
 					}
 				}
