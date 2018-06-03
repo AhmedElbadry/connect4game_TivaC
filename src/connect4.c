@@ -438,15 +438,12 @@ int main(void){
 
 				
 				//wait for an input
-				while(SW1 && SW2){
-					SW1 = GPIO_PORTF_DATA_R&0x10;
-					SW2 = GPIO_PORTF_DATA_R&0x01;
-				};
+				
 					//AI turn
 			if(turn%2){
 				if (turn/2 == 0)
 				{
-					playerPos = rand() % 7;
+					playerPos = 3;
 					playersCoins[turn%2][turn/2].x = colCenter[playerPos];
 					update();
 					if(colCoins[playerPos] < numOfRow){
@@ -454,13 +451,18 @@ int main(void){
 						playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].y;
 						colCoins[playerPos]++;
 						turn++;
+						continue;
 					}
 				}
 					
 	}	
 				//player1 turn
 				if(!turn%2){
-						//SW1 on release, move to the next position
+						while(SW1 && SW2){
+							SW1 = GPIO_PORTF_DATA_R&0x10;
+							SW2 = GPIO_PORTF_DATA_R&0x01;
+						};
+								//SW1 on release, move to the next position
 						if(!SW1){
 							
 							//wait untill SW1 is released
