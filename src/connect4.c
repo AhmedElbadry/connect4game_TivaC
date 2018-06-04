@@ -409,18 +409,20 @@ int playInAcol(){
 
 //should return a valid position
 int getAiNextPos(){
-	int decision;
+	int decision= rand() % 7;
 	int triplePos = checkTriples();
-	if(
-			triplePos != -1
-		){
+	if(triplePos != -1){
 				decision = triplePos;
-			}
-	else
-			{
+	}
+	else if(colCoins[3] == 6){
 					decision = 3;
 					triplePos=-1;
-				}
+	}
+	else{
+		do
+			decision = rand() % 7;
+		while (decision != 3);
+	}
 	//decision = 3;
 	
 	return decision;
