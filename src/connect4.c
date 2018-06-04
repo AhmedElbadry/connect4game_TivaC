@@ -47,6 +47,7 @@ int isMaster;
 int willWePlayFirst;
 int currPlayer;
 int opponentPlayerNum;
+int isMenuMode;
 
 //this structure describes each individual cell
 //(x, y) are the center point of a cell
@@ -93,6 +94,7 @@ struct coin playersCoins[2][numOfCoinsForEachPlayer];
 void gameInit(){
 	
 	willWePlayFirst = 1;
+	isMenuMode = 1;
 	
 	//the grid dimintions
 	fullGridW = (cellW * numOfCol + vLineW*(numOfCol+1));
@@ -436,7 +438,7 @@ int main(void){
 		SW1 = GPIO_PORTF_DATA_R&0x10;
 		SW2 = GPIO_PORTF_DATA_R&0x01;
 		
-		if(gameMode == 0){
+		if(isMenuMode){
 			//menu code 
 			Nokia5110_Clear();
 			Nokia5110_SetCursor(4, 0);
@@ -464,6 +466,9 @@ int main(void){
 			else if(!SW2){
 				while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
 				gameMode = menuCursor + 1 ;
+				
+				//this variable should be deleted to complete the menu <<<<<<<<<<<<<<<<<<<
+				isMenuMode = 0;
 				continue;
 				
 
@@ -475,7 +480,6 @@ int main(void){
 			
 				
 		}
-		//2 players on the same kit
 		else if(gameMode == 1 || gameMode == 2 || gameMode == 3){
 			
 			
