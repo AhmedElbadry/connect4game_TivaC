@@ -52,3 +52,74 @@ void TExaS_Init(enum DisplayType display);
 // Inputs:  none
 // Outputs: none
 void TExaS_Stop(void);
+
+
+
+
+//------------UART0_Init------------
+// Initialize the UART for 115,200 baud rate (assuming 80 MHz UART clock),
+// 8 bit word length, no parity bits, one stop bit, FIFOs enabled
+// Input: none
+// Output: none
+void UART0_Init(void);
+
+//------------UART0_InChar------------
+// Wait for new serial port input
+// Input: none
+// Output: ASCII code for key typed
+unsigned char UART0_InChar(void);
+//------------UART0_InCharNonBlocking------------
+// look for new serial port input
+// Input: none
+// Output: ASCII code for key typed
+//         0 if no key ready
+unsigned char UART0_InCharNonBlocking(void);
+//------------UART0_OutChar------------
+// Output 8-bit to serial port
+// Input: letter is an 8-bit ASCII character to be transferred
+// Output: none
+void UART0_OutChar(unsigned char data);
+//------------UART0_OutCharNonBlock------------
+// Output 8-bit to serial port, do not wait
+// Input: letter is an 8-bit ASCII character to be transferred
+// Output: none
+void UART0_OutCharNonBlock(unsigned char data);
+
+
+
+//------------UART_InUDec------------
+// InUDec accepts ASCII input in unsigned decimal format
+//     and converts to a 32-bit unsigned number
+//     valid range is 0 to 4294967295 (2^32-1)
+// Input: none
+// Output: 32-bit unsigned number
+// If you enter a number above 4294967295, it will return an incorrect value
+// Backspace will remove last digit typed
+unsigned long UART_InUDec(void);
+
+//------------UART_OutString------------
+// Output String (NULL termination)
+// Input: pointer to a NULL-terminated string to be transferred
+// Output: none
+void UART_OutString(unsigned char buffer[]);
+
+//-----------------------UART_ConvertUDec-----------------------
+// Converts a 32-bit number in unsigned decimal format
+// Input: 32-bit number to be transferred
+// Output: store the conversion in global variable String[10]
+// Fixed format 4 digits, one space after, null termination
+// Examples
+//    4 to "   4 "  
+//   31 to "  31 " 
+//  102 to " 102 " 
+// 2210 to "2210 "
+//10000 to "**** "  any value larger than 9999 converted to "**** "
+void UART_ConvertUDec(unsigned long n);
+
+//-----------------------UART_OutUDec-----------------------
+// Output a 32-bit number in unsigned decimal format
+// Input: 32-bit number to be transferred
+// Output: none
+// Fixed format 4 digits, one space after, null termination
+void UART_OutUDec(unsigned long n);
+
