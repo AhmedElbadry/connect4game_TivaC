@@ -440,24 +440,36 @@ int main(void){
 				//wait for an input
 				
 					//AI turn
-			if(turn%2){
-				if (turn/2 == 0)
-				{
+			if(!(turn%2)){
+				
 					playerPos = 3;
 					playersCoins[turn%2][turn/2].x = colCenter[playerPos];
-					update();
-					if(colCoins[playerPos] < numOfRow){
-						theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].player = turn%2 + 1;
-						playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].y;
-						colCoins[playerPos]++;
-						turn++;
-						continue;
+					if(colCoins[playerPos] < numOfRow){			
+						update();
+						if(colCoins[playerPos] < numOfRow){
+							theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].player = turn%2 + 1;
+							playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].y;
+							colCoins[playerPos]++;
+							turn++;
+							continue;
+						}
 					}
-				}
+					else {
+						playerPos = rand() % 7;
+						playersCoins[turn%2][turn/2].x = colCenter[playerPos];
+						update();
+						if(colCoins[playerPos] < numOfRow){
+							theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].player = turn%2 + 1;
+							playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].y;
+							colCoins[playerPos]++;
+							turn++;
+							continue;
+					}
+				
 					
 	}	
 				//player1 turn
-				if(!turn%2){
+				if(turn%2){
 						while(SW1 && SW2){
 							SW1 = GPIO_PORTF_DATA_R&0x10;
 							SW2 = GPIO_PORTF_DATA_R&0x01;
@@ -488,6 +500,7 @@ int main(void){
 								turn++;
 							}
 						}
+					}
 					}
 					
 }
