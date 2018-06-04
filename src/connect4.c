@@ -8,7 +8,8 @@
 #include "Random.h"
 #include "TExaS.h"
 #include "img.h"
-
+void Delay100ms(unsigned long count);
+	
 //port f
 void PortF_Init(void);
 
@@ -195,7 +196,8 @@ void update(){
 	DrawGrid();
 	
 	//show current player
-	draw(&playersCoins[currPlayer][turn/2]);
+	if(!winner)
+		draw(&playersCoins[currPlayer][turn/2]);
 	
 	
 	//show the coins inside the grid
@@ -384,7 +386,6 @@ int shouldPlayWithSw(){
 }
 
 int playInAcol(){
-	playersCoins[currPlayer][turn/2].x = colCenter[playerPos];
 	if(colCoins[playerPos] < numOfRow){
 		theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].player = currPlayer + 1;
 		playersCoins[currPlayer][turn/2].y = theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].y;
@@ -540,8 +541,13 @@ int main(void){
 							(gameMode == 3)) && // ai vs ai
 							kitsNum == 1
 						){
+						Delay100ms(1);
 						playerPos = getAiNextPos();
+						playersCoins[currPlayer][turn/2].x = colCenter[playerPos];
+						update();
+						
 						playInAcol();
+						Delay100ms(1);
 					}
 					
 				}
