@@ -46,6 +46,9 @@ int currPlayer;
 int opponentPlayerNum;
 int isMenuMode;
 int menuNum;
+int cellReq;
+int decision=-1;
+int triplePos;
 
 //this structure describes each individual cell
 //(x, y) are the center point of a cell
@@ -286,7 +289,7 @@ int isThereAwinner(){
 
 
 int checkTriples(){
-	int cellReq=-1;
+	cellReq=-1;
 		for(i = 0; i < numOfRow; i++){
 			for(j = 0; j < numOfCol; j++){
 				//check vertically
@@ -409,19 +412,18 @@ int playInAcol(){
 
 //should return a valid position
 int getAiNextPos(){
-	int decision= rand() % 7;
-	int triplePos = checkTriples();
+	triplePos = checkTriples();
 	if(triplePos != -1){
 				decision = triplePos;
 	}
-	else if(colCoins[3] == 6){
+	else if(colCoins[3] != 6){
 					decision = 3;
 					triplePos=-1;
 	}
 	else{
 		do
 			decision = rand() % 7;
-		while (decision != 3);
+		while (decision == 3);
 	}
 	//decision = 3;
 	
@@ -577,6 +579,7 @@ int main(void){
 						){
 						Delay100ms(1);
 						playerPos = getAiNextPos();
+						decision = -1;
 						playersCoins[currPlayer][turn/2].x = colCenter[playerPos];
 						update();
 						

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\connect4.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\connect4.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Mon Jun 04 18:15:04 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Mon Jun 04 20:23:57 2018
 <BR><P>
 <H3>Maximum Stack Usage =         76 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -715,7 +715,7 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sys_exit
 </UL>
 
-<P><STRONG><a name="[a9]"></a>rand</STRONG> (Thumb, 48 bytes, Stack size 0 bytes, rand.o(.emb_text))
+<P><STRONG><a name="[aa]"></a>rand</STRONG> (Thumb, 48 bytes, Stack size 0 bytes, rand.o(.emb_text))
 <BR><BR>[Called By]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getAiNextPos
 </UL>
 
@@ -936,7 +936,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TExaS_Init
 </UL>
 
-<P><STRONG><a name="[aa]"></a>checkTriples</STRONG> (Thumb, 728 bytes, Stack size 0 bytes, connect4.o(i.checkTriples))
+<P><STRONG><a name="[a9]"></a>checkTriples</STRONG> (Thumb, 750 bytes, Stack size 0 bytes, connect4.o(i.checkTriples))
 <BR><BR>[Called By]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getAiNextPos
 </UL>
 
@@ -952,11 +952,11 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[a8]"></a>getAiNextPos</STRONG> (Thumb, 68 bytes, Stack size 16 bytes, connect4.o(i.getAiNextPos))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = getAiNextPos
+<P><STRONG><a name="[a8]"></a>getAiNextPos</STRONG> (Thumb, 84 bytes, Stack size 8 bytes, connect4.o(i.getAiNextPos))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = getAiNextPos
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rand
-<LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;checkTriples
+<BR>[Calls]<UL><LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rand
+<LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;checkTriples
 </UL>
 <BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -965,7 +965,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[8c]"></a>main</STRONG> (Thumb, 812 bytes, Stack size 8 bytes, connect4.o(i.main))
+<P><STRONG><a name="[8c]"></a>main</STRONG> (Thumb, 820 bytes, Stack size 8 bytes, connect4.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 76 + Unknown Stack Size
 <LI>Call Chain = main &rArr; update &rArr; DrawGrid &rArr; Nokia5110_PrintBMP
 </UL>
