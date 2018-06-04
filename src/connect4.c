@@ -278,7 +278,95 @@ int isThereAwinner(){
 unsigned int SW1;
 unsigned int SW2;
 
-
+void checkTriples(){
+	int cellReq;
+		for(i = 0; i < numOfRow; i++){
+			for(j = 0; j < numOfCol; j++){
+				//check vertically
+				if(i + 2 < numOfRow){
+					if(
+						theGrid[i][j].player == theGrid[i+1][j].player &&
+						theGrid[i+1][j].player == theGrid[i+2][j].player &&
+						theGrid[i][j].player != 0
+						){
+							cellReq = j ;
+							break;
+						}
+				}
+				
+				//horizontally
+				if(j + 2 < numOfCol){
+					if(
+						theGrid[i][j].player == theGrid[i][j+1].player &&
+						theGrid[i][j+1].player == theGrid[i][j+2].player &&
+						theGrid[i][j].player != 0
+						){
+							if(
+								j+3 < numOfCol &&
+								theGrid[i][j+3].player == 0 && 
+								((i == 0 ) || colCoins[j+3] == i))
+								{
+									cellReq = j+3;
+									break;
+								}
+							else if(
+								j-1 >= 0 &&
+								theGrid[i][j-1].player == 0 && 
+								((i == 0 ) || colCoins[j-1] == i)
+							)
+								{
+									cellReq = j-1;
+									break;
+								}
+						}
+				}
+				
+				//diagonally right
+				if(i + 2 < numOfRow && j + 2 < numOfCol){
+					if(
+						theGrid[i][j].player == theGrid[i+1][j+1].player &&
+						theGrid[i+1][j+1].player == theGrid[i+2][j+2].player &&
+						theGrid[i][j].player != 0
+						)
+						{
+								if(
+									j+3 < numOfCol &&
+									i+3 < numOfRow &&
+									theGrid[i][j+3].player == 0 && 
+									((i == 0 ) || colCoins[j+3] == i))
+									{
+										cellReq = j+3;
+										break;
+									}
+								else if(
+									j-1 >= 0 &&
+									theGrid[i][j-1].player == 0 && 
+									((i == 0 ) || colCoins[j-1] == i)
+								)
+									{
+										cellReq = j-1;
+										break;
+									}
+							}
+						}
+			}
+			
+			//diagonally left
+			if(i + 3 < numOfRow && j - 3 >= 0){
+				if(
+					theGrid[i][j].player == theGrid[i+1][j-1].player &&
+					theGrid[i+1][j-1].player == theGrid[i+2][j-2].player &&
+					theGrid[i+2][j-2].player == theGrid[i+3][j-3].player &&
+					theGrid[i][j].player != 0
+					){
+						status = theGrid[i][j].player;
+						break;
+					}
+			}
+		}
+	
+	
+}
 
 int main(void){
 	//UART_Init();
