@@ -43,6 +43,8 @@ int i;
 int	j;
 int kitsNum;
 int isMaster;
+int isFirstPlayer;
+int playerNum;
 
 //this structure describes each individual cell
 //(x, y) are the center point of a cell
@@ -85,7 +87,10 @@ struct coin playersCoins[2][numOfCoinsForEachPlayer];
 
 
 
+
 void gameInit(){
+	
+	isFirstPlayer = 1;
 	
 	//the grid dimintions
 	fullGridW = (cellW * numOfCol + vLineW*(numOfCol+1));
@@ -275,8 +280,6 @@ int isThereAwinner(){
 	return status ;
 }
 
-unsigned int SW1;
-unsigned int SW2;
 
 void checkTriples(){
 	int cellReq;
@@ -359,7 +362,7 @@ void checkTriples(){
 					theGrid[i+2][j-2].player == theGrid[i+3][j-3].player &&
 					theGrid[i][j].player != 0
 					){
-						status = theGrid[i][j].player;
+						cellReq = theGrid[i][j].player;
 						break;
 					}
 			}
@@ -367,6 +370,43 @@ void checkTriples(){
 	
 	
 }
+
+int shouldPlayWithSw(){
+	if(
+		gameMode == 1 || //if p1 vs p2
+		(gameMode == 2 && turn%2 == 0) // if p1 vs ai : p1 only should play with the swiches;
+		)
+	
+		return 1;
+	else
+		return 0;
+}
+
+int playInAcol(){
+	playersCoins[turn%2][turn/2].x = colCenter[playerPos];
+	if(colCoins[playerPos] < numOfRow){
+		theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].player = turn%2 + 1;
+		playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].y;
+		colCoins[playerPos]++;
+		turn++;
+		return 1;
+	}else
+		return 0;
+	
+}
+
+//should return a valid position
+int getAiNextPos(){
+	int decision;
+	
+	decision = rand()%7;
+	
+	return decision;
+}
+
+unsigned int SW1;
+unsigned int SW2;
+
 
 int main(void){
 	//UART_Init();
@@ -383,7 +423,7 @@ int main(void){
 	
 	gameMode = 0;
 	menuCursor = 0;
-	
+	kitsNum = 1;
 	
 	//kitsNum
 	//isMaster
@@ -432,7 +472,7 @@ int main(void){
 				
 		}
 		//2 players on the same kit
-		else if(gameMode == 1){
+		else if(gameMode == 1 || gameMode == 2 || gameMode == 3){
 		
 			if(turn > lastTurn){
 				playerPos = 0;
@@ -459,147 +499,52 @@ int main(void){
 			}
 
 			
-
+				//when playing with switches
+				if(shouldPlayWithSw()){
+					//wait for an input
+					while( SW1 && SW2){
+						SW1 = GPIO_PORTF_DATA_R&0x10;
+						SW2 = GPIO_PORTF_DATA_R&0x01;
+					};
 				
-				//wait for an input
-				while(SW1 && SW2){
-					SW1 = GPIO_PORTF_DATA_R&0x10;
-					SW2 = GPIO_PORTF_DATA_R&0x01;
-				};
 				
-				//SW1 on release, move to the next position
-				if(!SW1){
-					
-					//wait untill SW1 is released
-					while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
-					playerPos = (playerPos + 1)%numOfCol;
-					
-					//turn = 0; turn%2 = 0; first player >> turn/2 = 0; first coin
-					//turn = 1; turn%2 = 1; second player >> turn/2 = 0; first coin
-					//turn = 2; turn%2 = 0; first player >> turn/2 = 1; second coin
-					//turn = 3; turn%2 = 1; second player >> turn/2 = 1; second coin
-					playersCoins[turn%2][turn/2].x = colCenter[playerPos];
-				}
 				
-				//SW2 on release, place the coin in the column if possible
-				if(!SW2){
-					//wait untill SW2 is released
-					while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
-					
-					if(colCoins[playerPos] < numOfRow){
-						theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].player = turn%2 + 1;
-						playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].y;
-						colCoins[playerPos]++;
-						turn++;
-					}
-				}
-				
-			}
-		//player vs AI
-		else if (gameMode == 2){
-				
-			if(turn > lastTurn){
-				playerPos = 0;
-				lastTurn = turn;
-			}
-			update();
-			winner = isThereAwinner();
-			if(winner){
-				Nokia5110_ClearBuffer();
-				Nokia5110_DisplayBuffer();
-				Nokia5110_Clear();
-				
-				if(winner == 1 ){
-					Nokia5110_Clear();
-					Nokia5110_SetCursor(1, 1);
-					Nokia5110_OutString("Player one wins");
-				}
-				else{
-					Nokia5110_Clear();
-					Nokia5110_SetCursor(1, 1);
-					Nokia5110_OutString("Player two wins");
-				}
-				break;
-			}
-
-			
-
-				
-				//wait for an input
-				
-					//AI turn
-			if(!(turn%2)){
-				
-					playerPos = 3;
-					playersCoins[turn%2][turn/2].x = colCenter[playerPos];
-					if(colCoins[playerPos] < numOfRow){			
-						update();
-						if(colCoins[playerPos] < numOfRow){
-							theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].player = turn%2 + 1;
-							playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].y;
-							colCoins[playerPos]++;
-							turn++;
-							continue;
-						}
-					}
-					else {
-						playerPos = rand() % 7;
-						playersCoins[turn%2][turn/2].x = colCenter[playerPos];
-						update();
-						if(colCoins[playerPos] < numOfRow){
-							theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].player = turn%2 + 1;
-							playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].y;
-							colCoins[playerPos]++;
-							turn++;
-							continue;
-						}
-					}	
-			}
-				//player1 turn
-				if(turn%2){
-						while(SW1 && SW2){
-							SW1 = GPIO_PORTF_DATA_R&0x10;
-							SW2 = GPIO_PORTF_DATA_R&0x01;
-						};
-								//SW1 on release, move to the next position
-						if(!SW1){
-							
-							//wait untill SW1 is released
-							while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
-							playerPos = (playerPos + 1)%numOfCol;
-							
-							//turn = 0; turn%2 = 0; first player >> turn/2 = 0; first coin
-							//turn = 1; turn%2 = 1; second player >> turn/2 = 0; first coin
-							//turn = 2; turn%2 = 0; first player >> turn/2 = 1; second coin
-							//turn = 3; turn%2 = 1; second player >> turn/2 = 1; second coin
-							playersCoins[turn%2][turn/2].x = colCenter[playerPos];
-						}
+					//SW1 on release, move to the next position
+					if(!SW1){
 						
-						//SW2 on release, place the coin in the column if possible
-						if(!SW2){
-							//wait untill SW2 is released
-							while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
-							
-							if(colCoins[playerPos] < numOfRow){
-								theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].player = turn%2 + 1;
-								playersCoins[turn%2][turn/2].y = theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].y;
-								colCoins[playerPos]++;
-								turn++;
-							}
-						}
+						//wait untill SW1 is released
+						while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
+						playerPos = (playerPos + 1)%numOfCol;
+						
+						//turn = 0; turn%2 = 0; first player >> turn/2 = 0; first coin
+						//turn = 1; turn%2 = 1; second player >> turn/2 = 0; first coin
+						//turn = 2; turn%2 = 0; first player >> turn/2 = 1; second coin
+						//turn = 3; turn%2 = 1; second player >> turn/2 = 1; second coin
+						playersCoins[turn%2][turn/2].x = colCenter[playerPos];
 					}
-		}
+					//SW2 on release, place the coin in the column if possible
+					if(!SW2){
+						//wait untill SW2 is released
+						while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
+						playInAcol();
+					}
+					
+				}else{
+					
+					if(
+							((gameMode == 2 && turn%2 == 1) || //p1 vs ai
+							(gameMode == 3)) && // ai vs ai
+							kitsNum == 1
+						){
+						playerPos = getAiNextPos();
+						playInAcol();
+					}
+					
+				}
+				
+			}
 		
 			
-			
-			
-		//AI vs AI
-			else if(gameMode == 3){
-				Nokia5110_Clear();
-				Nokia5110_SetCursor(1, 1);
-				Nokia5110_OutString("game mode 3");
-			}
-				
 		
   }
 
