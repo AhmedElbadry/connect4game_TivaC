@@ -1,7 +1,4 @@
 
-#include <stdio.h>  
-#include "UARTIO.h"
-#include <stdlib.h>
 
 #include "tm4c123gh6pm.h"
 #include "Nokia5110.h"
@@ -410,7 +407,8 @@ int getAiNextPos(){
 
 unsigned int SW1;
 unsigned int SW2;
-
+char x;
+int xx;
 
 int main(void){
 	//UART_Init();
@@ -423,7 +421,7 @@ int main(void){
 	
 	gameInit();
 	
-	
+	//UART0_OutChar((char)50);
 	
 	gameMode = 0;
 	menuCursor = 0;
