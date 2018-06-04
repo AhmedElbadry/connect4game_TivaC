@@ -45,6 +45,7 @@ int willWePlayFirst;
 int currPlayer;
 int opponentPlayerNum;
 int isMenuMode;
+int menuNum;
 
 //this structure describes each individual cell
 //(x, y) are the center point of a cell
@@ -92,6 +93,7 @@ void gameInit(){
 	
 	willWePlayFirst = 1;
 	isMenuMode = 1;
+	menuNum = 0;
 	
 	//the grid dimintions
 	fullGridW = (cellW * numOfCol + vLineW*(numOfCol+1));
@@ -437,47 +439,56 @@ int main(void){
 		SW2 = GPIO_PORTF_DATA_R&0x01;
 		
 		if(isMenuMode){
-			//menu code 
-			Nokia5110_Clear();
-			Nokia5110_SetCursor(4, 0);
-			Nokia5110_OutString("MENU");
-			Nokia5110_SetCursor(2, 2);
-			Nokia5110_OutString("P1 vs P2");
-			Nokia5110_SetCursor(2, 3);
-			Nokia5110_OutString("P1 vs AI");			
-			Nokia5110_SetCursor(2, 4);
-			Nokia5110_OutString("AI vs AI");
-			
-			Nokia5110_SetCursor( 0 , menuCursor + 2);
-			Nokia5110_OutString(">>"); 
-			//wait for an input
-				while(SW1 && SW2){
-					SW1 = GPIO_PORTF_DATA_R&0x10;
-					SW2 = GPIO_PORTF_DATA_R&0x01;
-				};
-			//move down in menu	
-			if(!SW1){
-				while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
-				menuCursor = (menuCursor + 1) % 3;
-			}
-			//choose selection
-			else if(!SW2){
-				while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
-				gameMode = menuCursor + 1 ;
+				//menu code 
+			if(menuNum == 0){
+				Nokia5110_Clear();
+				Nokia5110_SetCursor(4, 0);
+				Nokia5110_OutString("MENU");
+				Nokia5110_SetCursor(2, 2);
+				Nokia5110_OutString("P1 vs P2");
+				Nokia5110_SetCursor(2, 3);
+				Nokia5110_OutString("P1 vs AI");			
+				Nokia5110_SetCursor(2, 4);
+				Nokia5110_OutString("AI vs AI");
 				
-				//this variable should be deleted to complete the menu <<<<<<<<<<<<<<<<<<<
-				isMenuMode = 0;
-				continue;
-				
+				Nokia5110_SetCursor( 0 , menuCursor + 2);
+				Nokia5110_OutString(">>"); 
+				//wait for an input
+					while(SW1 && SW2){
+						SW1 = GPIO_PORTF_DATA_R&0x10;
+						SW2 = GPIO_PORTF_DATA_R&0x01;
+					};
+				//move down in menu	
+				if(!SW1){
+					while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
+					menuCursor = (menuCursor + 1) % 3;
+				}
+				//choose selection
+				else if(!SW2){
+					while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
+					gameMode = menuCursor + 1 ;
+					
+					//this variable should be deleted to complete the menu <<<<<<<<<<<<<<<<<<<
+					isMenuMode = 0;
+					continue;
+					
 
-			}
-			Nokia5110_SetCursor( 0 ,menuCursor + 2);
-			Nokia5110_OutString(">>"); 
-			 
-			
-			
+				}
+				Nokia5110_SetCursor( 0 ,menuCursor + 2);
+				Nokia5110_OutString(">>"); 
+			}else if (menuNum == 1){
 				
-		}
+			}
+			else if (menuNum == 2){
+				
+			}else if (menuNum == 3){
+				
+			}
+
+			
+		}//menu code end
+		
+		
 		else if(gameMode == 1 || gameMode == 2 || gameMode == 3){
 			
 			
