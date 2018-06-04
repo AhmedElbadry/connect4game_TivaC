@@ -464,10 +464,9 @@ int main(void){
 							colCoins[playerPos]++;
 							turn++;
 							continue;
-					}
-				
-					
-	}	
+						}
+					}	
+			}
 				//player1 turn
 				if(turn%2){
 						while(SW1 && SW2){
@@ -501,9 +500,7 @@ int main(void){
 							}
 						}
 					}
-					}
-					
-}
+		}
 		
 			
 			
