@@ -115,7 +115,7 @@ struct coin playersCoins[2][numOfCoinsForEachPlayer];
 void gameInit(){
 	
 	willWePlayFirst = 1;
-	isMenuMode = 0;
+	isMenuMode = 1;
 	menuNum = 0;
 	codingMode = 0;
 		
@@ -740,7 +740,7 @@ int main(void){
 	
 	//UART1_OutChar((char)50);
 	
-	gameMode = 2;
+	gameMode = 0;
 	menuCursor = 0;
 	kitsNum = 1;
 	
