@@ -570,8 +570,8 @@ void theMenu(){
 					GPIO_PORTF_DATA_R = 0x04; //blue led is on
 					while(numOfTrialsIn < allowedNumOftrialsToInput){
 						
-						UART1_OutChar(handshake);
-						inputFromTheSecondDevice = UART1_InCharNonBlocking(); // check for confirmation from the slave
+						UART0_OutChar(handshake);
+						inputFromTheSecondDevice = UART0_InCharNonBlocking(); // check for confirmation from the slave
 						
 						if(codingMode) Delay100ms(5); // delay .5 second
 						
@@ -591,6 +591,7 @@ void theMenu(){
 					}else{
 						outputToTheScreen(2, 2, "Error! going to the previuos menu", 1);
 						GPIO_PORTF_DATA_R = 0x02; //red led is on
+						
 						if(!codingMode) Delay100ms(5);
 					}
 					
@@ -606,8 +607,8 @@ void theMenu(){
 						outputToTheScreen(2, 2, "The handshake.", 1);
 						GPIO_PORTF_DATA_R = 0x04; //blue led is on
 						
-						//Delay100ms(5); // delay .5 second
-						inputFromTheSecondDevice = UART1_InCharNonBlocking(); // see if there was data sent by the master
+						if(codingMode) Delay100ms(5); // delay .5 second
+						inputFromTheSecondDevice = UART0_InCharNonBlocking(); // see if there was data sent by the master
 						
 						//if there was data, break the loop
 						if(inputFromTheSecondDevice) break;
@@ -623,18 +624,16 @@ void theMenu(){
 						
 						isMenuMode = 0; // get out from the menu
 						
-						UART1_OutChar(confirmation);
+						UART0_OutChar(confirmation);
 						if(!codingMode) Delay100ms(5);
 					}else{
 						
 						outputToTheScreen(2, 2, "Error! going to the previuos menu", 1);
 						GPIO_PORTF_DATA_R = 0x02; //red led is on
+						menuCursor = 0;
 						if(!codingMode) Delay100ms(5);
 					}
-					
-					
-					
-					
+
 				}
 				menuCursor = 0;
 			}
@@ -683,7 +682,7 @@ unsigned char color = 0; // this microcontroller's color value
 
 char x;
 int main(void){
-	UART1_Init();
+	UART0_Init();
   TExaS_Init(SSI0_Real_Nokia5110_Scope);  // set system clock to 80 MHz
   Random_Init(1);
   Nokia5110_Init();
@@ -693,7 +692,7 @@ int main(void){
 	
 	gameInit();
 	
-	//UART1_OutChar((char)50);
+	//UART0_OutChar((char)50);
 	
 	gameMode = 0;
 	menuCursor = 0;
@@ -704,13 +703,8 @@ int main(void){
 	
 	willWePlayFirst = 1;
 	
-	codingMode = 0;
+	codingMode = 1;
 	
-	
-	//x = UART1_InChar();
-	
-	
-	//UART1_OutChar('a');
 	
 	if(!codingMode){
 		Nokia5110_ClearBuffer();
@@ -725,27 +719,7 @@ int main(void){
 		Nokia5110_OutString("Connect4");	
 		Delay100ms(1);
 	}
-	
-	/*
-	while(1){
-		SW1 = GPIO_PORTF_DATA_R&0x10; // Read SW1
-    if((SW1 == 0) && prevSW1){    // falling of SW1?
-      color = (color+1)&0x07;     // step to next color 
-    }
-    prevSW1 = SW1; // current value of SW1 
-    SW2 = GPIO_PORTF_DATA_R&0x01; // Read SW2
-    if((SW2 == 0) && prevSW2){    // falling of SW2?
-      UART1_OutChar(color+0x30);   // send color as '0' - '7'
-    }
-    prevSW2 = SW2; // current value of SW2 
-    inColor = UART1_InCharNonBlocking();
-    if(inColor){ // new data have come in from the UART??
-      color = inColor&0x07;     // update this computer's color
-    }
-    GPIO_PORTF_DATA_R = ColorWheel[color];  // update LEDs
-		
-	}*/
-	
+
 	
 	
   while(1){
