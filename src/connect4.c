@@ -443,10 +443,22 @@ int main(void){
 	willWePlayFirst = 0;
 	
 	
-	x = UART_InChar();
+	//x = UART_InChar();
 	
 	
-	UART_OutChar('a');
+	//UART_OutChar('a');
+	
+	Nokia5110_ClearBuffer();
+	Nokia5110_DisplayBuffer();
+	Nokia5110_SetCursor(2,3);
+	Nokia5110_OutString("Connect4");	
+	Delay100ms(1);
+	Nokia5110_SetCursor(2,3);
+	Nokia5110_OutString("           ");
+	Delay100ms(1);
+	Nokia5110_SetCursor(2,3);
+	Nokia5110_OutString("Connect4");	
+	Delay100ms(1);
 	
   while(1){
 		Nokia5110_ClearBuffer();
@@ -455,8 +467,6 @@ int main(void){
 		
 		if(isMenuMode){
 				//menu code 
-			
-			
 			if(menuNum == 0){
 				Nokia5110_Clear();
 				Nokia5110_SetCursor(4, 0);
@@ -484,26 +494,106 @@ int main(void){
 				else if(!SW2){
 					while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
 					gameMode = menuCursor + 1 ;
-					
-					//this variable should be deleted to complete the menu <<<<<<<<<<<<<<<<<<<
-					isMenuMode = 0;
-					continue;
-					
+					menuNum = 1 ;
 
 				}
 				Nokia5110_SetCursor( 0 ,menuCursor + 2);
 				Nokia5110_OutString(">>"); 
-			}else if (menuNum == 1){
-				
+					}
+			else if (menuNum == 1){
+				Nokia5110_Clear();
+				Nokia5110_SetCursor(2, 2);
+				Nokia5110_OutString("1 kit");
+				Nokia5110_SetCursor(2, 3);
+				Nokia5110_OutString("2 kits");			
+				Nokia5110_SetCursor( 0 , menuCursor + 2);
+				Nokia5110_OutString(">>"); 
+				while(SW1 && SW2){
+						SW1 = GPIO_PORTF_DATA_R&0x10;
+						SW2 = GPIO_PORTF_DATA_R&0x01;
+					};
+				//move down in menu	
+				if(!SW1){
+					while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
+					menuCursor = (menuCursor +1) %2 ;
+				}
+				//choose selection
+				else if(!SW2){
+					while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
+					kitsNum = menuCursor+1 ;
+					
+				if(kitsNum==1){
+					isMenuMode = 0;
+					continue;
+				} 	
+				else if (kitsNum==2) {
+				menuNum = 2 ;
+				}
+			}
+				Nokia5110_SetCursor( 0 ,menuCursor + 2);
+				Nokia5110_OutString(">>"); 
 			}
 			else if (menuNum == 2){
+				Nokia5110_Clear();
+				Nokia5110_SetCursor(2, 2);
+				Nokia5110_OutString("Master");
+				Nokia5110_SetCursor(2, 3);
+				Nokia5110_OutString("Slave");			
 				
+				Nokia5110_SetCursor( 0 , menuCursor + 2);
+				Nokia5110_OutString(">>"); 
+				while(SW1 && SW2){
+						SW1 = GPIO_PORTF_DATA_R&0x10;
+						SW2 = GPIO_PORTF_DATA_R&0x01;
+					};
+				//move down in menu	
+				if(!SW1){
+					while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
+					menuCursor = (menuCursor + 1) % 2;
+				}
+				//choose selection
+				else if(!SW2){
+					while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
+					isMaster = menuCursor + 1 ;
+				if(isMaster==1){
+					menuNum = 3 ;
+				} 	
+				else {
+					isMenuMode = 0;
+					continue;
+				}
+			}
+				Nokia5110_SetCursor( 0 ,menuCursor + 2);
+				Nokia5110_OutString(">>"); 
 			}else if (menuNum == 3){
+					Nokia5110_Clear();
+				Nokia5110_SetCursor(2, 2);
+				Nokia5110_OutString("Player 1");
+				Nokia5110_SetCursor(2, 3);
+				Nokia5110_OutString("Player 2");			
 				
+				Nokia5110_SetCursor( 0 , menuCursor + 2);
+				Nokia5110_OutString(">>"); 
+				while(SW1 && SW2){
+						SW1 = GPIO_PORTF_DATA_R&0x10;
+						SW2 = GPIO_PORTF_DATA_R&0x01;
+					};
+				//move down in menu	
+				if(!SW1){
+					while(!SW1){SW1 = GPIO_PORTF_DATA_R&0x10;}
+					menuCursor = (menuCursor + 1) % 2;
+				}
+				//choose selection
+				else if(!SW2){
+					while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
+					willWePlayFirst = menuCursor ;
+					isMenuMode = 0;
+					continue;
 			}
 
 			
-		}//menu code end
+		}
+	}//menu code end
 		
 		
 		else if(gameMode == 1 || gameMode == 2 || gameMode == 3){
