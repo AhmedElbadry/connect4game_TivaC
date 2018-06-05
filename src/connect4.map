@@ -33,16 +33,13 @@ Section Cross References
     connect4.o(i.DrawGrid) refers to nokia5110.o(i.Nokia5110_PrintBMP) for Nokia5110_PrintBMP
     connect4.o(i.DrawGrid) refers to connect4.o(.data) for leftMargin
     connect4.o(i.DrawGrid) refers to connect4.o(.constdata) for vvLine
-    connect4.o(i.checkTriples) refers to connect4.o(.data) for cellReq
+    connect4.o(i.checkTriples) refers to connect4.o(.data) for i
     connect4.o(i.checkTriples) refers to connect4.o(.bss) for theGrid
     connect4.o(i.draw) refers to nokia5110.o(i.Nokia5110_PrintBMP) for Nokia5110_PrintBMP
     connect4.o(i.gameInit) refers to connect4.o(.data) for willWePlayFirst
     connect4.o(i.gameInit) refers to connect4.o(.bss) for theGrid
     connect4.o(i.gameInit) refers to connect4.o(.constdata) for pl1coin
-    connect4.o(i.getAiNextPos) refers to connect4.o(i.checkTriples) for checkTriples
     connect4.o(i.getAiNextPos) refers to rand.o(.emb_text) for rand
-    connect4.o(i.getAiNextPos) refers to connect4.o(.data) for triplePos
-    connect4.o(i.getAiNextPos) refers to connect4.o(.bss) for colCoins
     connect4.o(i.isThereAwinner) refers to connect4.o(.data) for i
     connect4.o(i.isThereAwinner) refers to connect4.o(.bss) for theGrid
     connect4.o(i.main) refers to uart.o(i.UART_Init) for UART_Init
@@ -208,6 +205,7 @@ Section Cross References
 Removing Unused input sections from the image.
 
     Removing nokia5110.o(i.Nokia5110_OutUDec), (412 bytes).
+    Removing connect4.o(i.checkTriples), (1324 bytes).
     Removing texas.o(i.SetMode), (24 bytes).
     Removing texas.o(i.StartTimer4), (36 bytes).
     Removing texas.o(i.StopTimer4), (24 bytes).
@@ -224,11 +222,7 @@ Removing Unused input sections from the image.
     Removing uart.o(i.UART_OutUDec), (42 bytes).
     Removing uart.o(i.UART_OutUHex), (52 bytes).
 
-<<<<<<< HEAD
 17 unused section(s) (total 2316 bytes) removed from the image.
-=======
-14 unused section(s) (total 994 bytes) removed from the image.
->>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
 
 ==============================================================================
 
@@ -239,23 +233,14 @@ Image Symbol Table
     Symbol Name                              Value     Ov Type        Size  Object(Section)
 
     RESET                                    0x00000000   Section      644  startup.o(RESET)
-<<<<<<< HEAD
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardshut.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit1.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit2.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit3.o ABSOLUTE
-=======
-    ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit2.o ABSOLUTE
-    ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit3.o ABSOLUTE
-    ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit1.o ABSOLUTE
-    ../clib/angel/boardlib.s                 0x00000000   Number         0  boardshut.o ABSOLUTE
-    ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_zi.o ABSOLUTE
->>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
     ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_copy.o ABSOLUTE
     ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_zi.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry4.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit2.o ABSOLUTE
-<<<<<<< HEAD
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry2.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit.o ABSOLUTE
@@ -273,31 +258,11 @@ Image Symbol Table
     ../clib/armsys.c                         0x00000000   Number         0  no_argv.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  _get_argv_nomalloc.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
-=======
-    ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry4.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry2.o ABSOLUTE
-    ../clib/angel/rt.s                       0x00000000   Number         0  rt_raise.o ABSOLUTE
-    ../clib/angel/scatter.s                  0x00000000   Number         0  __scatter.o ABSOLUTE
-    ../clib/angel/startup.s                  0x00000000   Number         0  __main.o ABSOLUTE
-    ../clib/angel/sys.s                      0x00000000   Number         0  libspace.o ABSOLUTE
-    ../clib/angel/sys.s                      0x00000000   Number         0  sys_stackheap_outer.o ABSOLUTE
-    ../clib/angel/sys.s                      0x00000000   Number         0  indicate_semi.o ABSOLUTE
-    ../clib/angel/sys.s                      0x00000000   Number         0  use_no_semi.o ABSOLUTE
-    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_command.o ABSOLUTE
-    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_wrch.o ABSOLUTE
-    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_exit.o ABSOLUTE
-    ../clib/armsys.c                         0x00000000   Number         0  _get_argv_nomalloc.o ABSOLUTE
-    ../clib/armsys.c                         0x00000000   Number         0  no_argv.o ABSOLUTE
-    ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
-    ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
->>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
     ../clib/heapalloc.c                      0x00000000   Number         0  hrguard.o ABSOLUTE
     ../clib/heapaux.c                        0x00000000   Number         0  heapauxi.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libinit2.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libinit.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libshutdown2.o ABSOLUTE
-<<<<<<< HEAD
     ../clib/libinit.s                        0x00000000   Number         0  libshutdown.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_outer.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_formal.o ABSOLUTE
@@ -313,23 +278,6 @@ Image Symbol Table
     ../clib/signal.c                         0x00000000   Number         0  defsig_rtred_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_inner.o ABSOLUTE
-=======
-    ../clib/libinit.s                        0x00000000   Number         0  libinit2.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  __raise.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_pvfn_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_exit.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_formal.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_segv_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_other.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_outer.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_cppl_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtred_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_stak_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_general.o ABSOLUTE
->>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
     ../clib/signal.s                         0x00000000   Number         0  defsig.o ABSOLUTE
     ../clib/stdlib.c                         0x00000000   Number         0  exit.o ABSOLUTE
     ../clib/stdlib.c                         0x00000000   Number         0  rand.o ABSOLUTE
@@ -418,7 +366,6 @@ Image Symbol Table
     i.Timer4A_Handler                        0x00000cac   Section        0  texas.o(i.Timer4A_Handler)
     i.Timer5A_Handler                        0x00000ccc   Section        0  texas.o(i.Timer5A_Handler)
     i.UART0_Init                             0x00000cfc   Section        0  texas.o(i.UART0_Init)
-<<<<<<< HEAD
     i.UART_InChar                            0x00000dbc   Section        0  uart.o(i.UART_InChar)
     i.UART_Init                              0x00000dd4   Section        0  uart.o(i.UART_Init)
     i.UART_OutChar                           0x00000e6c   Section        0  uart.o(i.UART_OutChar)
@@ -446,33 +393,6 @@ Image Symbol Table
     .bss                                     0x20000778   Section       56  texas.o(.bss)
     .bss                                     0x200007b0   Section      228  rand.o(.bss)
     .bss                                     0x20000894   Section       96  libspace.o(.bss)
-=======
-    i.checkTriples                           0x00000dbc   Section        0  connect4.o(i.checkTriples)
-    i.draw                                   0x000010c0   Section        0  connect4.o(i.draw)
-    i.gameInit                               0x000010dc   Section        0  connect4.o(i.gameInit)
-    i.getAiNextPos                           0x00001328   Section        0  connect4.o(i.getAiNextPos)
-    i.isThereAwinner                         0x00001388   Section        0  connect4.o(i.isThereAwinner)
-    i.lcdwrite                               0x000018ac   Section        0  nokia5110.o(i.lcdwrite)
-    lcdwrite                                 0x000018ad   Thumb Code    66  nokia5110.o(i.lcdwrite)
-    i.main                                   0x000018f8   Section        0  connect4.o(i.main)
-    i.playInAcol                             0x00001cb8   Section        0  connect4.o(i.playInAcol)
-    i.shouldPlayWithSw                       0x00001d84   Section        0  connect4.o(i.shouldPlayWithSw)
-    i.update                                 0x00001db4   Section        0  connect4.o(i.update)
-    .constdata                               0x00001e50   Section      480  nokia5110.o(.constdata)
-    ASCII                                    0x00001e50   Data         480  nokia5110.o(.constdata)
-    .constdata                               0x00002030   Section     1472  connect4.o(.constdata)
-    ASCII                                    0x00002030   Data         480  connect4.o(.constdata)
-    .constdata                               0x000025f0   Section      360  texas.o(.constdata)
-    .data                                    0x20000000   Section      112  connect4.o(.data)
-    .data                                    0x20000070   Section       52  texas.o(.data)
-    DATA                                     0x200000a4   Section        4  random.o(DATA)
-    M                                        0x200000a4   Data           4  random.o(DATA)
-    .bss                                     0x200000a8   Section      504  nokia5110.o(.bss)
-    .bss                                     0x200002a0   Section     1232  connect4.o(.bss)
-    .bss                                     0x20000770   Section       66  texas.o(.bss)
-    .bss                                     0x200007b4   Section      228  rand.o(.bss)
-    .bss                                     0x20000898   Section       96  libspace.o(.bss)
->>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
     HEAP                                     0x200008f8   Section        0  startup.o(HEAP)
     STACK                                    0x200008f8   Section     1024  startup.o(STACK)
     HeapMem                                  0x200008f8   Data           0  startup.o(HEAP)
@@ -724,7 +644,6 @@ Image Symbol Table
     Timer4A_Handler                          0x00000cad   Thumb Code    20  texas.o(i.Timer4A_Handler)
     Timer5A_Handler                          0x00000ccd   Thumb Code    34  texas.o(i.Timer5A_Handler)
     UART0_Init                               0x00000cfd   Thumb Code   160  texas.o(i.UART0_Init)
-<<<<<<< HEAD
     UART_InChar                              0x00000dbd   Thumb Code    20  uart.o(i.UART_InChar)
     UART_Init                                0x00000dd5   Thumb Code   126  uart.o(i.UART_Init)
     UART_OutChar                             0x00000e6d   Thumb Code    18  uart.o(i.UART_OutChar)
@@ -787,72 +706,10 @@ Image Symbol Table
     opponentPlayerNum                        0x20000054   Data           4  connect4.o(.data)
     isMenuMode                               0x20000058   Data           4  connect4.o(.data)
     menuNum                                  0x2000005c   Data           4  connect4.o(.data)
-=======
-    checkTriples                             0x00000dbd   Thumb Code   750  connect4.o(i.checkTriples)
-    draw                                     0x000010c1   Thumb Code    26  connect4.o(i.draw)
-    gameInit                                 0x000010dd   Thumb Code   500  connect4.o(i.gameInit)
-    getAiNextPos                             0x00001329   Thumb Code    84  connect4.o(i.getAiNextPos)
-    isThereAwinner                           0x00001389   Thumb Code  1304  connect4.o(i.isThereAwinner)
-    main                                     0x000018f9   Thumb Code   820  connect4.o(i.main)
-    playInAcol                               0x00001cb9   Thumb Code   180  connect4.o(i.playInAcol)
-    shouldPlayWithSw                         0x00001d85   Thumb Code    36  connect4.o(i.shouldPlayWithSw)
-    update                                   0x00001db5   Thumb Code   134  connect4.o(i.update)
-    hLine                                    0x00002210   Data         157  connect4.o(.constdata)
-    vvLine                                   0x000022ad   Data         269  connect4.o(.constdata)
-    pxl                                      0x000023ba   Data         129  connect4.o(.constdata)
-    pl1coin                                  0x0000243b   Data         133  connect4.o(.constdata)
-    pl2coin                                  0x000024c0   Data         133  connect4.o(.constdata)
-    arrow                                    0x00002545   Data         133  connect4.o(.constdata)
-    cellW                                    0x000025cc   Data           4  connect4.o(.constdata)
-    cellH                                    0x000025d0   Data           4  connect4.o(.constdata)
-    hLineW                                   0x000025d4   Data           4  connect4.o(.constdata)
-    vLineW                                   0x000025d8   Data           4  connect4.o(.constdata)
-    numOfCol                                 0x000025dc   Data           4  connect4.o(.constdata)
-    numOfRow                                 0x000025e0   Data           4  connect4.o(.constdata)
-    numOfCoinsForEachPlayer                  0x000025e4   Data           4  connect4.o(.constdata)
-    coinH                                    0x000025e8   Data           4  connect4.o(.constdata)
-    coinW                                    0x000025ec   Data           4  connect4.o(.constdata)
-    NoInputMsg                               0x000025f0   Data          40  texas.o(.constdata)
-    OutputPortMsg0                           0x00002618   Data          40  texas.o(.constdata)
-    OutputPortMsg1                           0x00002640   Data          40  texas.o(.constdata)
-    OutputPortMsg2                           0x00002668   Data          40  texas.o(.constdata)
-    OutputPortMsg3                           0x00002690   Data          40  texas.o(.constdata)
-    BlankMsg                                 0x000026b8   Data          40  texas.o(.constdata)
-    InitializedMsg                           0x000026e0   Data          40  texas.o(.constdata)
-    IntroMsg                                 0x00002708   Data          40  texas.o(.constdata)
-    DoneMsg                                  0x00002730   Data          40  texas.o(.constdata)
-    Region$$Table$$Base                      0x00002758   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00002778   Number         0  anon$$obj.o(Region$$Table)
-    decision                                 0x20000000   Data           4  connect4.o(.data)
-    leftMargin                               0x20000004   Data           4  connect4.o(.data)
-    topMargin                                0x20000008   Data           4  connect4.o(.data)
-    fullGridH                                0x2000000c   Data           4  connect4.o(.data)
-    fullGridW                                0x20000010   Data           4  connect4.o(.data)
-    turn                                     0x20000014   Data           4  connect4.o(.data)
-    lastTurn                                 0x20000018   Data           4  connect4.o(.data)
-    cellCenX                                 0x2000001c   Data           4  connect4.o(.data)
-    cellCenY                                 0x20000020   Data           4  connect4.o(.data)
-    playerPos                                0x20000024   Data           4  connect4.o(.data)
-    winner                                   0x20000028   Data           4  connect4.o(.data)
-    gameMode                                 0x2000002c   Data           4  connect4.o(.data)
-    menuCursor                               0x20000030   Data           4  connect4.o(.data)
-    i                                        0x20000034   Data           4  connect4.o(.data)
-    j                                        0x20000038   Data           4  connect4.o(.data)
-    kitsNum                                  0x2000003c   Data           4  connect4.o(.data)
-    isMaster                                 0x20000040   Data           4  connect4.o(.data)
-    willWePlayFirst                          0x20000044   Data           4  connect4.o(.data)
-    currPlayer                               0x20000048   Data           4  connect4.o(.data)
-    opponentPlayerNum                        0x2000004c   Data           4  connect4.o(.data)
-    isMenuMode                               0x20000050   Data           4  connect4.o(.data)
-    menuNum                                  0x20000054   Data           4  connect4.o(.data)
-    cellReq                                  0x20000058   Data           4  connect4.o(.data)
-    triplePos                                0x2000005c   Data           4  connect4.o(.data)
->>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
     SW1                                      0x20000060   Data           4  connect4.o(.data)
     SW2                                      0x20000064   Data           4  connect4.o(.data)
     x                                        0x20000068   Data           1  connect4.o(.data)
     xx                                       0x2000006c   Data           4  connect4.o(.data)
-<<<<<<< HEAD
     inColor                                  0x20000070   Data           1  connect4.o(.data)
     TExaS_Period                             0x20000074   Data           4  texas.o(.data)
     TExaS_Ports                              0x20000078   Data           8  texas.o(.data)
@@ -875,30 +732,6 @@ Image Symbol Table
     _random_number_data                      0x200007b0   Data         228  rand.o(.bss)
     __libspace_start                         0x20000894   Data          96  libspace.o(.bss)
     __temporary_stack_top$libspace           0x200008f4   Data           0  libspace.o(.bss)
-=======
-    TExaS_Period                             0x20000070   Data           4  texas.o(.data)
-    TExaS_Ports                              0x20000074   Data           8  texas.o(.data)
-    Display                                  0x2000007c   Data           1  texas.o(.data)
-    TExaS_Meter                              0x20000080   Data           4  texas.o(.data)
-    ADCnum                                   0x20000084   Data           4  texas.o(.data)
-    LastMode                                 0x20000088   Data           4  texas.o(.data)
-    bFlag                                    0x2000008c   Data           4  texas.o(.data)
-    Count                                    0x20000090   Data           4  texas.o(.data)
-    DelayBetweenTests                        0x20000094   Data           4  texas.o(.data)
-    TExaS_Test                               0x20000098   Data           4  texas.o(.data)
-    ScopeMode                                0x2000009c   Data           4  texas.o(.data)
-    ScopeCount                               0x200000a0   Data           4  texas.o(.data)
-    Screen                                   0x200000a8   Data         504  nokia5110.o(.bss)
-    colCoins                                 0x200002a0   Data          28  connect4.o(.bss)
-    colCenter                                0x200002bc   Data          28  connect4.o(.bss)
-    theGrid                                  0x200002d8   Data         504  connect4.o(.bss)
-    playersCoins                             0x200004d0   Data         672  connect4.o(.bss)
-    TExaS                                    0x20000770   Data          56  texas.o(.bss)
-    String                                   0x200007a8   Data          10  texas.o(.bss)
-    _random_number_data                      0x200007b4   Data         228  rand.o(.bss)
-    __libspace_start                         0x20000898   Data          96  libspace.o(.bss)
-    __temporary_stack_top$libspace           0x200008f8   Data           0  libspace.o(.bss)
->>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
 
 
 
@@ -908,15 +741,9 @@ Memory Map of the image
 
   Image Entry point : 0x0000026d
 
-<<<<<<< HEAD
   Load Region LR_1 (Base: 0x00000000, Size: 0x000025c8, Max: 0xffffffff, ABSOLUTE)
 
     Execution Region ER_RO (Base: 0x00000000, Size: 0x0000251c, Max: 0xffffffff, ABSOLUTE)
-=======
-  Load Region LR_1 (Base: 0x00000000, Size: 0x00002820, Max: 0xffffffff, ABSOLUTE)
-
-    Execution Region ER_RO (Base: 0x00000000, Size: 0x00002778, Max: 0xffffffff, ABSOLUTE)
->>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -996,7 +823,6 @@ Memory Map of the image
     0x00000994   0x00000030   Code   RO           21    i.Nokia5110_SetCursor  nokia5110.o
     0x000009c4   0x0000007c   Code   RO          192    i.PLL_Init          texas.o
     0x00000a40   0x00000078   Code   RO           97    i.PortF_Init        connect4.o
-<<<<<<< HEAD
     0x00000ab8   0x00000018   Code   RO          193    i.SetCode           texas.o
     0x00000ad0   0x00000018   Code   RO          194    i.SetCourse         texas.o
     0x00000ae8   0x000001c4   Code   RO          198    i.TExaS_Init        texas.o
@@ -1043,50 +869,6 @@ Memory Map of the image
     0x200007b0   0x000000e4   Zero   RW          373    .bss                c_w.l(rand.o)
     0x20000894   0x00000060   Zero   RW          460    .bss                c_w.l(libspace.o)
     0x200008f4   0x00000004   PAD
-=======
-    0x00000ab8   0x00000018   Code   RO          186    i.SetCode           texas.o
-    0x00000ad0   0x00000018   Code   RO          187    i.SetCourse         texas.o
-    0x00000ae8   0x000001c4   Code   RO          191    i.TExaS_Init        texas.o
-    0x00000cac   0x00000020   Code   RO          193    i.Timer4A_Handler   texas.o
-    0x00000ccc   0x00000030   Code   RO          194    i.Timer5A_Handler   texas.o
-    0x00000cfc   0x000000c0   Code   RO          197    i.UART0_Init        texas.o
-    0x00000dbc   0x00000304   Code   RO           98    i.checkTriples      connect4.o
-    0x000010c0   0x0000001a   Code   RO           99    i.draw              connect4.o
-    0x000010da   0x00000002   PAD
-    0x000010dc   0x0000024c   Code   RO          100    i.gameInit          connect4.o
-    0x00001328   0x00000060   Code   RO          101    i.getAiNextPos      connect4.o
-    0x00001388   0x00000524   Code   RO          102    i.isThereAwinner    connect4.o
-    0x000018ac   0x0000004c   Code   RO           22    i.lcdwrite          nokia5110.o
-    0x000018f8   0x000003c0   Code   RO          103    i.main              connect4.o
-    0x00001cb8   0x000000cc   Code   RO          104    i.playInAcol        connect4.o
-    0x00001d84   0x00000030   Code   RO          105    i.shouldPlayWithSw  connect4.o
-    0x00001db4   0x0000009c   Code   RO          106    i.update            connect4.o
-    0x00001e50   0x000001e0   Data   RO           24    .constdata          nokia5110.o
-    0x00002030   0x000005c0   Data   RO          108    .constdata          connect4.o
-    0x000025f0   0x00000168   Data   RO          206    .constdata          texas.o
-    0x00002758   0x00000020   Data   RO          487    Region$$Table       anon$$obj.o
-
-
-    Execution Region ER_RW (Base: 0x20000000, Size: 0x000000a8, Max: 0xffffffff, ABSOLUTE)
-
-    Base Addr    Size         Type   Attr      Idx    E Section Name        Object
-
-    0x20000000   0x00000070   Data   RW          109    .data               connect4.o
-    0x20000070   0x00000034   Data   RW          207    .data               texas.o
-    0x200000a4   0x00000004   Data   RW           91    DATA                random.o
-
-
-    Execution Region ER_ZI (Base: 0x200000a8, Size: 0x00000c50, Max: 0xffffffff, ABSOLUTE)
-
-    Base Addr    Size         Type   Attr      Idx    E Section Name        Object
-
-    0x200000a8   0x000001f8   Zero   RW           23    .bss                nokia5110.o
-    0x200002a0   0x000004d0   Zero   RW          107    .bss                connect4.o
-    0x20000770   0x00000042   Zero   RW          205    .bss                texas.o
-    0x200007b2   0x00000002   PAD
-    0x200007b4   0x000000e4   Zero   RW          330    .bss                c_w.l(rand.o)
-    0x20000898   0x00000060   Zero   RW          417    .bss                c_w.l(libspace.o)
->>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
     0x200008f8   0x00000000   Zero   RW            2    HEAP                startup.o
     0x200008f8   0x00000400   Zero   RW            1    STACK               startup.o
 
@@ -1098,30 +880,17 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-<<<<<<< HEAD
-      3582        360       1504        113       1232       8117   connect4.o
-      1096         76        480          0        504       8589   nokia5110.o
-        40         12          0          4          0        176   random.o
-       692        632          0          0       1024        876   startup.o
-      1120        244        360         52         56      15436   texas.o
-       200         36          0          0          0       1141   uart.o
+      3582        360       1504        113       1232       7817   connect4.o
+      1096         76        480          0        504       8317   nokia5110.o
+        40         12          0          4          0        156   random.o
+       692        632          0          0       1024        836   startup.o
+      1120        244        360         52         56      15208   texas.o
+       200         36          0          0          0       1077   uart.o
 
     ----------------------------------------------------------------------
-      6736       1360       2376        172       2820      34335   Object Totals
+      6736       1360       2376        172       2820      33411   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          6          0          0          3          4          0   (incl. Padding)
-=======
-      4418        394       1472        112       1232       8434   connect4.o
-      1096         76        480          0        504       8489   nokia5110.o
-        40         12          0          4          0        168   random.o
-       692        632          0          0       1024        860   startup.o
-      1120        244        360         52         66      15479   texas.o
-
-    ----------------------------------------------------------------------
-      7372       1358       2344        168       2828      33430   Object Totals
-         0          0         32          0          0          0   (incl. Generated)
-         6          0          0          0          2          0   (incl. Padding)
->>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
 
     ----------------------------------------------------------------------
 
@@ -1169,9 +938,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-<<<<<<< HEAD
-      7124       1394       2376        172       3148      33147   Grand Totals
-      7124       1394       2376        172       3148      33147   ELF Image Totals
+      7124       1394       2376        172       3148      32223   Grand Totals
+      7124       1394       2376        172       3148      32223   ELF Image Totals
       7124       1394       2376        172          0          0   ROM Totals
 
 ==============================================================================
@@ -1179,17 +947,6 @@ Image component sizes
     Total RO  Size (Code + RO Data)                 9500 (   9.28kB)
     Total RW  Size (RW Data + ZI Data)              3320 (   3.24kB)
     Total ROM Size (Code + RO Data + RW Data)       9672 (   9.45kB)
-=======
-      7760       1392       2344        168       3152      32346   Grand Totals
-      7760       1392       2344        168       3152      32346   ELF Image Totals
-      7760       1392       2344        168          0          0   ROM Totals
-
-==============================================================================
-
-    Total RO  Size (Code + RO Data)                10104 (   9.87kB)
-    Total RW  Size (RW Data + ZI Data)              3320 (   3.24kB)
-    Total ROM Size (Code + RO Data + RW Data)      10272 (  10.03kB)
->>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
 
 ==============================================================================
 
