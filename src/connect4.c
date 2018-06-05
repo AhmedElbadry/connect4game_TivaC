@@ -52,7 +52,7 @@ int SW1;
 int SW2;
 
 
-
+int codingMode;
 
 
 //this structure describes each individual cell
@@ -503,8 +503,8 @@ void theMenu(){
 				} 	
 				else if (kitsNum==2) {
 				menuNum = 2;
-				menuCursor = 0;
 				}
+				menuCursor = 0;
 			}
 				Nokia5110_SetCursor( 0 ,menuCursor + 2);
 				Nokia5110_OutString(">>"); 
@@ -533,17 +533,19 @@ void theMenu(){
 					isMaster = menuCursor + 1 ;
 				if(isMaster==1){
 					menuNum = 3 ;
-					menuCursor = 0;
-				} 	
+				}
 				else {
+					isMaster = 0;
 					isMenuMode = 0;
 					//continue;
 				}
+				menuCursor = 0;
 			}
+				
 				Nokia5110_SetCursor( 0 ,menuCursor + 2);
 				Nokia5110_OutString(">>"); 
 			}else if (menuNum == 3){
-					Nokia5110_Clear();
+				Nokia5110_Clear();
 				Nokia5110_SetCursor(2, 2);
 				Nokia5110_OutString("Player 1");
 				Nokia5110_SetCursor(2, 3);
@@ -563,7 +565,9 @@ void theMenu(){
 				//choose selection
 				else if(!SW2){
 					while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
-					willWePlayFirst = menuCursor ;
+					willWePlayFirst = menuCursor;
+					if(willWePlayFirst != 1)
+							willWePlayFirst = 0;
 					isMenuMode = 0;
 					//continue;
 			}
@@ -600,23 +604,29 @@ int main(void){
 	
 	willWePlayFirst = 1;
 	
+	codingMode = 1;
+	
 	
 	//x = UART_InChar();
 	
 	
 	//UART_OutChar('a');
 	
-	Nokia5110_ClearBuffer();
-	Nokia5110_DisplayBuffer();
-	Nokia5110_SetCursor(2,3);
-	Nokia5110_OutString("Connect4");	
-	Delay100ms(1);
-	Nokia5110_SetCursor(2,3);
-	Nokia5110_OutString("           ");
-	Delay100ms(1);
-	Nokia5110_SetCursor(2,3);
-	Nokia5110_OutString("Connect4");	
-	Delay100ms(1);
+	if(!codingMode){
+		Nokia5110_ClearBuffer();
+		Nokia5110_DisplayBuffer();
+		Nokia5110_SetCursor(2,3);
+		Nokia5110_OutString("Connect4");	
+		Delay100ms(1);
+		Nokia5110_SetCursor(2,3);
+		Nokia5110_OutString("           ");
+		Delay100ms(1);
+		Nokia5110_SetCursor(2,3);
+		Nokia5110_OutString("Connect4");	
+		Delay100ms(1);
+	}
+	
+	
 	
   while(1){
 		Nokia5110_ClearBuffer();
@@ -697,13 +707,16 @@ int main(void){
 							(gameMode == 3)) && // ai vs ai
 							kitsNum == 1
 						){
-						//Delay100ms(1);
+						if(!codingMode)
+							Delay100ms(1);
+						
 						playerPos = getAiNextPos();
 						playersCoins[currPlayer][turn/2].x = colCenter[playerPos];
 						update();
 						
 						playInAcol();
-						//Delay100ms(1);
+						if(!codingMode)
+							Delay100ms(1);
 					}
 				}
 				
