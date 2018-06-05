@@ -4,3 +4,5 @@
 .\connect4.o: Random.h
 .\connect4.o: TExaS.h
 .\connect4.o: img.h
+.\connect4.o: UART.h
+.\connect4.o: C:\Keil\ARM\ARMCC\bin\..\include\stdio.h

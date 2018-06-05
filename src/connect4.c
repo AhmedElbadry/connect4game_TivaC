@@ -5,6 +5,8 @@
 #include "Random.h"
 #include "TExaS.h"
 #include "img.h"
+#include "UART.h"
+#include <stdio.h>
 void Delay100ms(unsigned long count);
 	
 //port f
@@ -412,8 +414,14 @@ unsigned int SW2;
 char x;
 int xx;
 
+
+const long ColorWheel[8] = {0x02,0x0A,0x08,0x0C,0x04,0x06,0x0E,0x00};
+long prevSW1 = 0;        // previous value of SW1
+long prevSW2 = 0;        // previous value of SW2
+unsigned char inColor;   // color value from other microcontroller
+unsigned char color = 0; // this microcontroller's color value
 int main(void){
-	//UART_Init();
+	UART_Init();
   TExaS_Init(SSI0_Real_Nokia5110_Scope);  // set system clock to 80 MHz
   Random_Init(1);
   Nokia5110_Init();
@@ -433,6 +441,13 @@ int main(void){
 	//isMaster
 	
 	willWePlayFirst = 0;
+	
+	
+	x = UART_InChar();
+	
+	
+	UART_OutChar('a');
+	
   while(1){
 		Nokia5110_ClearBuffer();
 		SW1 = GPIO_PORTF_DATA_R&0x10;
@@ -440,6 +455,8 @@ int main(void){
 		
 		if(isMenuMode){
 				//menu code 
+			
+			
 			if(menuNum == 0){
 				Nokia5110_Clear();
 				Nokia5110_SetCursor(4, 0);
