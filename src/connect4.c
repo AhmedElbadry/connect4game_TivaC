@@ -62,8 +62,8 @@ unsigned char inputFromTheSecondDevice;
 unsigned char outputToTheSecondDevice;
 
 //the protocole
-unsigned char handshake = 'a';
-unsigned char confirmation = 'b';
+unsigned char handshake = 2;
+unsigned char confirmation = 3;
 unsigned char player1 = 31;
 unsigned char player2 = 32;
 
@@ -564,25 +564,32 @@ void theMenu(){
 				if(isMaster==1){
 					//menuNum = 3;
 					
-					//[master] the handshake <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+					//[master] the handshake <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< #connection
 					//the master should send 17
 					outputToTheScreen(2, 2, "Trying to connect..", 1);
 					GPIO_PORTF_DATA_R = 0x04; //blue led is on
 					while(numOfTrialsIn < allowedNumOftrialsToInput){
 						
-						UART0_OutChar(handshake);
-						inputFromTheSecondDevice = UART0_InCharNonBlocking(); // check for confirmation from the slave
+						UART1_OutChar(handshake);
+						inputFromTheSecondDevice = UART1_InCharNonBlocking(); // check for confirmation from the slave
 						
 						if(codingMode) Delay100ms(5); // delay .5 second
 						
 						//if there was data, break the loop
-						if(inputFromTheSecondDevice) break;
+						if(inputFromTheSecondDevice){
+							/*GPIO_PORTF_DATA_R = 0x02;
+							for(i = 0; i < (int)inputFromTheSecondDevice*2; i++){
+								GPIO_PORTF_DATA_R ^= 0x04;
+								if(!codingMode) Delay100ms(5);
+							}*/
+							break;
+						}
 						
 						numOfTrialsIn++;
 					}
 					numOfTrialsIn = 0;
 					
-					if(inputFromTheSecondDevice){
+					if(inputFromTheSecondDevice == confirmation){
 						
 						outputToTheScreen(2, 2, "connected.", 1);
 						GPIO_PORTF_DATA_R = 0x08; //green led is on
@@ -608,15 +615,22 @@ void theMenu(){
 						GPIO_PORTF_DATA_R = 0x04; //blue led is on
 						
 						if(codingMode) Delay100ms(5); // delay .5 second
-						inputFromTheSecondDevice = UART0_InCharNonBlocking(); // see if there was data sent by the master
+						inputFromTheSecondDevice = UART1_InCharNonBlocking(); // see if there was data sent by the master
 						
 						//if there was data, break the loop
-						if(inputFromTheSecondDevice) break;
+						if(inputFromTheSecondDevice){
+							/*GPIO_PORTF_DATA_R = 0x02;
+							for(i = 0; i < (int)inputFromTheSecondDevice*2; i++){
+								GPIO_PORTF_DATA_R ^= 0x04;
+								if(!codingMode) Delay100ms(5);
+							}*/
+							break;
+						}
 						
 						numOfTrialsIn++;
 					}
 					numOfTrialsIn = 0;
-					if(inputFromTheSecondDevice){
+					if(inputFromTheSecondDevice == handshake){
 						
 						outputToTheScreen(2, 2, "Connected, confirmation code is sent.", 1);
 						
@@ -624,7 +638,7 @@ void theMenu(){
 						
 						isMenuMode = 0; // get out from the menu
 						
-						UART0_OutChar(confirmation);
+						UART1_OutChar(confirmation);
 						if(!codingMode) Delay100ms(5);
 					}else{
 						
@@ -664,8 +678,13 @@ void theMenu(){
 					willWePlayFirst = menuCursor;
 					if(willWePlayFirst != 1)
 							willWePlayFirst = 0;
-					isMenuMode = 0;
+					
+					
+					//isMenuMode = 0;
 					//continue;
+					
+					//[master] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< #playerMaster
+					
 			}
 
 			
@@ -682,7 +701,7 @@ unsigned char color = 0; // this microcontroller's color value
 
 char x;
 int main(void){
-	UART0_Init();
+	UART1_Init();
   TExaS_Init(SSI0_Real_Nokia5110_Scope);  // set system clock to 80 MHz
   Random_Init(1);
   Nokia5110_Init();
@@ -692,7 +711,7 @@ int main(void){
 	
 	gameInit();
 	
-	//UART0_OutChar((char)50);
+	//UART1_OutChar((char)50);
 	
 	gameMode = 0;
 	menuCursor = 0;
@@ -703,7 +722,7 @@ int main(void){
 	
 	willWePlayFirst = 1;
 	
-	codingMode = 1;
+	codingMode = 0;
 	
 	
 	if(!codingMode){
