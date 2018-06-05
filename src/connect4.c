@@ -50,6 +50,7 @@ int menuNum;
 int SW1;
 int SW2;
 int codingMode;
+int cellReq;
 
 
 //for the communication
@@ -114,7 +115,7 @@ struct coin playersCoins[2][numOfCoinsForEachPlayer];
 void gameInit(){
 	
 	willWePlayFirst = 1;
-	isMenuMode = 1;
+	isMenuMode = 0;
 	menuNum = 0;
 	codingMode = 0;
 		
@@ -308,9 +309,8 @@ int isThereAwinner(){
 }
 
 
-int cellReq;
 int checkTriples(){
-	cellReq=-1;
+		cellReq=-1;
 		for(i = 0; i < numOfRow; i++){
 			for(j = 0; j < numOfCol; j++){
 				//check vertically
@@ -326,33 +326,61 @@ int checkTriples(){
 						}
 				}
 				
-				//horizontally
-				if(j + 2 < numOfCol){
-					if(
-						theGrid[i][j].player == theGrid[i][j+1].player &&
-						theGrid[i][j+1].player == theGrid[i][j+2].player &&
-						(theGrid[i][j+3].player == 0 || theGrid[i][j-1].player == 0) &&
-						theGrid[i][j].player != 0 
-						){
-							if(
-								j+3 < numOfCol &&
-								theGrid[i][j+3].player == 0 && 
-								((i == 0 ) || colCoins[j+3] == i))
-								{
+				//horizontal ends 
+				else if(		//right side
+							j + 2 < numOfCol &&
+							theGrid[i][j].player == theGrid[i][j+1].player &&
+							theGrid[i][j+1].player == theGrid[i][j+2].player &&
+							theGrid[i][j+3].player == 0 &&
+							theGrid[i][j].player != 0 &&
+							((i == 5 ) || (colCoins[j+3] == numOfRow - i))
+						){							
 									cellReq = j+3;
 									break;
-								}
-							else if(
-								j-1 >= 0 &&
-								theGrid[i][j-1].player == 0 && 
-								((i == 0 ) || colCoins[j-1] == i)
+							}
+				else if(		//left side
+							j - 1 >= 0 &&
+							theGrid[i][j].player == theGrid[i][j+1].player &&
+							theGrid[i][j+1].player == theGrid[i][j+2].player &&
+							theGrid[i][j-1].player == 0 &&
+							theGrid[i][j].player != 0 &&
+							((i == 5 ) || (colCoins[j-1] == numOfRow - i))
+
+						){
+									cellReq = j-1;
+									break;
+							
+							}
+				//horizontal middle left   
+				else if(
+						theGrid[i][j].player == theGrid[i][j+2].player &&
+						theGrid[i][j+2].player == theGrid[i][j+3].player &&
+						theGrid[i][j+1].player == 0  &&
+						theGrid[i][j].player != 0 
+						){if( 	//left side
+								(i == 5 ) || (colCoins[j+1] == numOfRow - i)
 							)
 								{
-									cellReq = j-1;
+									cellReq = j+1;
 									break;
 								}
 						}
-				}
+				//horizontal middle right
+				else if(
+						theGrid[i][j].player == theGrid[i][j+1].player &&
+						theGrid[i][j+1].player == theGrid[i][j+3].player &&
+						theGrid[i][j+2].player == 0  &&
+						theGrid[i][j].player != 0 
+						){if( 	//right side
+								(i == 5 ) || (colCoins[j+2] == numOfRow - i)
+							)
+								{
+									cellReq = j+2;
+									break;
+								}
+						}
+						
+				
 			/*
 				//diagonally right
 				if(i + 2 < numOfRow && j + 2 < numOfCol){
@@ -450,7 +478,6 @@ int getAiNextPos(){
 			decision = rand()%7;
 		while (decision == 3);
 	}
-	//decision = 3;
 	
 	return decision;
 }
@@ -713,7 +740,7 @@ int main(void){
 	
 	//UART1_OutChar((char)50);
 	
-	gameMode = 0;
+	gameMode = 2;
 	menuCursor = 0;
 	kitsNum = 1;
 	
