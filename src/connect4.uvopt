@@ -244,12 +244,16 @@
         <Ww>
           <count>7</count>
           <WinNumber>1</WinNumber>
+<<<<<<< HEAD
           <ItemText>currPlayer</ItemText>
         </Ww>
         <Ww>
           <count>8</count>
           <WinNumber>1</WinNumber>
           <ItemText>colCoins,0x0A</ItemText>
+=======
+          <ItemText>(!turn%2),0x0A</ItemText>
+>>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
@@ -314,7 +318,11 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
       <TopLine>266</TopLine>
+=======
+      <TopLine>273</TopLine>
+>>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
       <CurrentLine>277</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\startup.s</PathWithFileName>
@@ -330,8 +338,13 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
       <TopLine>359</TopLine>
       <CurrentLine>391</CurrentLine>
+=======
+      <TopLine>375</TopLine>
+      <CurrentLine>390</CurrentLine>
+>>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
       <bDave2>0</bDave2>
       <PathWithFileName>.\Nokia5110.c</PathWithFileName>
       <FilenameWithoutPath>Nokia5110.c</FilenameWithoutPath>
@@ -360,10 +373,17 @@
       <FileType>1</FileType>
       <tvExp>1</tvExp>
       <Focus>0</Focus>
+<<<<<<< HEAD
       <ColumnNumber>2</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>434</TopLine>
       <CurrentLine>450</CurrentLine>
+=======
+      <ColumnNumber>35</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>276</TopLine>
+      <CurrentLine>334</CurrentLine>
+>>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
       <bDave2>0</bDave2>
       <PathWithFileName>.\connect4.c</PathWithFileName>
       <FilenameWithoutPath>connect4.c</FilenameWithoutPath>
@@ -378,8 +398,13 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
       <TopLine>519</TopLine>
       <CurrentLine>557</CurrentLine>
+=======
+      <TopLine>255</TopLine>
+      <CurrentLine>257</CurrentLine>
+>>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
       <bDave2>0</bDave2>
       <PathWithFileName>.\TExaS.c</PathWithFileName>
       <FilenameWithoutPath>TExaS.c</FilenameWithoutPath>

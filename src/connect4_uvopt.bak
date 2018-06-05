@@ -362,8 +362,13 @@
       <Focus>0</Focus>
       <ColumnNumber>22</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
       <TopLine>427</TopLine>
       <CurrentLine>465</CurrentLine>
+=======
+      <TopLine>329</TopLine>
+      <CurrentLine>333</CurrentLine>
+>>>>>>> de4ba644c12aebef9a459e86a9b9635bc80872fe
       <bDave2>0</bDave2>
       <PathWithFileName>.\connect4.c</PathWithFileName>
       <FilenameWithoutPath>connect4.c</FilenameWithoutPath>

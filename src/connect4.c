@@ -48,6 +48,9 @@ int currPlayer;
 int opponentPlayerNum;
 int isMenuMode;
 int menuNum;
+int cellReq;
+int decision=-1;
+int triplePos;
 
 //this structure describes each individual cell
 //(x, y) are the center point of a cell
@@ -287,8 +290,8 @@ int isThereAwinner(){
 }
 
 
-void checkTriples(){
-	int cellReq;
+int checkTriples(){
+	cellReq=-1;
 		for(i = 0; i < numOfRow; i++){
 			for(j = 0; j < numOfCol; j++){
 				//check vertically
@@ -296,7 +299,8 @@ void checkTriples(){
 					if(
 						theGrid[i][j].player == theGrid[i+1][j].player &&
 						theGrid[i+1][j].player == theGrid[i+2][j].player &&
-						theGrid[i][j].player != 0
+						theGrid[i-1][j].player == 0 &&
+						theGrid[i][j].player != 0 
 						){
 							cellReq = j ;
 							break;
@@ -308,7 +312,8 @@ void checkTriples(){
 					if(
 						theGrid[i][j].player == theGrid[i][j+1].player &&
 						theGrid[i][j+1].player == theGrid[i][j+2].player &&
-						theGrid[i][j].player != 0
+						(theGrid[i][j+3].player == 0 || theGrid[i][j-1].player == 0) &&
+						theGrid[i][j].player != 0 
 						){
 							if(
 								j+3 < numOfCol &&
@@ -329,7 +334,7 @@ void checkTriples(){
 								}
 						}
 				}
-				
+			/*
 				//diagonally right
 				if(i + 2 < numOfRow && j + 2 < numOfCol){
 					if(
@@ -358,7 +363,7 @@ void checkTriples(){
 									}
 							}
 						}
-			}
+			
 			
 			//diagonally left
 			if(i + 3 < numOfRow && j - 3 >= 0){
@@ -372,9 +377,16 @@ void checkTriples(){
 						break;
 					}
 			}
+			
+	*/
+			
+			
 		}
-	
-	
+	}
+	if (cellReq > -1)
+		return cellReq;
+	else 
+		return -1;
 }
 
 int shouldPlayWithSw(){
@@ -402,9 +414,20 @@ int playInAcol(){
 
 //should return a valid position
 int getAiNextPos(){
-	int decision;
-	
-	decision = rand()%7;
+	triplePos = checkTriples();
+	if(triplePos != -1){
+				decision = triplePos;
+	}
+	else if(colCoins[3] != 6){
+					decision = 3;
+					triplePos=-1;
+	}
+	else{
+		do
+			decision = rand() % 7;
+		while (decision == 3);
+	}
+	//decision = 3;
 	
 	return decision;
 }
@@ -573,6 +596,7 @@ int main(void){
 						){
 						Delay100ms(1);
 						playerPos = getAiNextPos();
+						decision = -1;
 						playersCoins[currPlayer][turn/2].x = colCenter[playerPos];
 						update();
 						
