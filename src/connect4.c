@@ -48,6 +48,12 @@ int currPlayer;
 int opponentPlayerNum;
 int isMenuMode;
 int menuNum;
+int SW1;
+int SW2;
+
+
+
+
 
 //this structure describes each individual cell
 //(x, y) are the center point of a cell
@@ -287,8 +293,9 @@ int isThereAwinner(){
 }
 
 
-void checkTriples(){
-	int cellReq;
+int cellReq;
+int checkTriples(){
+	cellReq=-1;
 		for(i = 0; i < numOfRow; i++){
 			for(j = 0; j < numOfCol; j++){
 				//check vertically
@@ -296,7 +303,8 @@ void checkTriples(){
 					if(
 						theGrid[i][j].player == theGrid[i+1][j].player &&
 						theGrid[i+1][j].player == theGrid[i+2][j].player &&
-						theGrid[i][j].player != 0
+						theGrid[i-1][j].player == 0 &&
+						theGrid[i][j].player != 0 
 						){
 							cellReq = j ;
 							break;
@@ -308,7 +316,8 @@ void checkTriples(){
 					if(
 						theGrid[i][j].player == theGrid[i][j+1].player &&
 						theGrid[i][j+1].player == theGrid[i][j+2].player &&
-						theGrid[i][j].player != 0
+						(theGrid[i][j+3].player == 0 || theGrid[i][j-1].player == 0) &&
+						theGrid[i][j].player != 0 
 						){
 							if(
 								j+3 < numOfCol &&
@@ -329,7 +338,7 @@ void checkTriples(){
 								}
 						}
 				}
-				
+			/*
 				//diagonally right
 				if(i + 2 < numOfRow && j + 2 < numOfCol){
 					if(
@@ -358,7 +367,7 @@ void checkTriples(){
 									}
 							}
 						}
-			}
+			
 			
 			//diagonally left
 			if(i + 3 < numOfRow && j - 3 >= 0){
@@ -372,9 +381,16 @@ void checkTriples(){
 						break;
 					}
 			}
+			
+	*/
+			
+			
 		}
-	
-	
+	}
+	if (cellReq > -1)
+		return cellReq;
+	else 
+		return -1;
 }
 
 int shouldPlayWithSw(){
@@ -388,6 +404,8 @@ int shouldPlayWithSw(){
 		return 0;
 }
 
+
+
 int playInAcol(){
 	if(colCoins[playerPos] < numOfRow){
 		theGrid[numOfRow - 1 - colCoins[playerPos]][playerPos].player = currPlayer + 1;
@@ -400,74 +418,31 @@ int playInAcol(){
 	
 }
 
+int triplePos;
+int decision;
 //should return a valid position
 int getAiNextPos(){
-	int decision;
-	
-	decision = rand()%7;
+	triplePos = checkTriples();
+	if(triplePos != -1){
+				decision = triplePos;
+	}
+	else if(colCoins[3] != 6){
+					decision = 3;
+					triplePos=-1;
+	}
+	else{
+		do
+			decision = rand() % 7;
+		while (decision == 3);
+	}
+	//decision = 3;
 	
 	return decision;
 }
 
-unsigned int SW1;
-unsigned int SW2;
-char x;
-int xx;
 
-
-const long ColorWheel[8] = {0x02,0x0A,0x08,0x0C,0x04,0x06,0x0E,0x00};
-long prevSW1 = 0;        // previous value of SW1
-long prevSW2 = 0;        // previous value of SW2
-unsigned char inColor;   // color value from other microcontroller
-unsigned char color = 0; // this microcontroller's color value
-int main(void){
-	UART_Init();
-  TExaS_Init(SSI0_Real_Nokia5110_Scope);  // set system clock to 80 MHz
-  Random_Init(1);
-  Nokia5110_Init();
-  Nokia5110_ClearBuffer();
-	Nokia5110_DisplayBuffer();      // draw buffer
-	PortF_Init();
-	
-	gameInit();
-	
-	//UART0_OutChar((char)50);
-	
-	gameMode = 0;
-	menuCursor = 0;
-	kitsNum = 1;
-	
-	//kitsNum
-	//isMaster
-	
-	willWePlayFirst = 0;
-	
-	
-	//x = UART_InChar();
-	
-	
-	//UART_OutChar('a');
-	
-	Nokia5110_ClearBuffer();
-	Nokia5110_DisplayBuffer();
-	Nokia5110_SetCursor(2,3);
-	Nokia5110_OutString("Connect4");	
-	Delay100ms(1);
-	Nokia5110_SetCursor(2,3);
-	Nokia5110_OutString("           ");
-	Delay100ms(1);
-	Nokia5110_SetCursor(2,3);
-	Nokia5110_OutString("Connect4");	
-	Delay100ms(1);
-	
-  while(1){
-		Nokia5110_ClearBuffer();
-		SW1 = GPIO_PORTF_DATA_R&0x10;
-		SW2 = GPIO_PORTF_DATA_R&0x01;
-		
-		if(isMenuMode){
-				//menu code 
-			if(menuNum == 0){
+void theMenu(){
+		if(menuNum == 0){
 				Nokia5110_Clear();
 				Nokia5110_SetCursor(4, 0);
 				Nokia5110_OutString("MENU");
@@ -495,7 +470,7 @@ int main(void){
 					while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
 					gameMode = menuCursor + 1 ;
 					menuNum = 1 ;
-
+					menuCursor = 0;
 				}
 				Nokia5110_SetCursor( 0 ,menuCursor + 2);
 				Nokia5110_OutString(">>"); 
@@ -524,10 +499,11 @@ int main(void){
 					
 				if(kitsNum==1){
 					isMenuMode = 0;
-					continue;
+					//continue;
 				} 	
 				else if (kitsNum==2) {
-				menuNum = 2 ;
+				menuNum = 2;
+				menuCursor = 0;
 				}
 			}
 				Nokia5110_SetCursor( 0 ,menuCursor + 2);
@@ -557,10 +533,11 @@ int main(void){
 					isMaster = menuCursor + 1 ;
 				if(isMaster==1){
 					menuNum = 3 ;
+					menuCursor = 0;
 				} 	
 				else {
 					isMenuMode = 0;
-					continue;
+					//continue;
 				}
 			}
 				Nokia5110_SetCursor( 0 ,menuCursor + 2);
@@ -588,36 +565,95 @@ int main(void){
 					while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
 					willWePlayFirst = menuCursor ;
 					isMenuMode = 0;
-					continue;
+					//continue;
 			}
 
 			
 		}
+}
+
+
+
+char x;
+int xx;
+
+
+int main(void){
+	UART_Init();
+  TExaS_Init(SSI0_Real_Nokia5110_Scope);  // set system clock to 80 MHz
+  Random_Init(1);
+  Nokia5110_Init();
+  Nokia5110_ClearBuffer();
+	Nokia5110_DisplayBuffer();      // draw buffer
+	PortF_Init();
+	
+	gameInit();
+	
+	//UART0_OutChar((char)50);
+	
+	gameMode = 0;
+	menuCursor = 0;
+	kitsNum = 1;
+	
+	//kitsNum
+	//isMaster
+	
+	willWePlayFirst = 1;
+	
+	
+	//x = UART_InChar();
+	
+	
+	//UART_OutChar('a');
+	
+	Nokia5110_ClearBuffer();
+	Nokia5110_DisplayBuffer();
+	Nokia5110_SetCursor(2,3);
+	Nokia5110_OutString("Connect4");	
+	Delay100ms(1);
+	Nokia5110_SetCursor(2,3);
+	Nokia5110_OutString("           ");
+	Delay100ms(1);
+	Nokia5110_SetCursor(2,3);
+	Nokia5110_OutString("Connect4");	
+	Delay100ms(1);
+	
+  while(1){
+		Nokia5110_ClearBuffer();
+		SW1 = GPIO_PORTF_DATA_R&0x10;
+		SW2 = GPIO_PORTF_DATA_R&0x01;
+		
+		if(isMenuMode){
+			theMenu();
 	}//menu code end
 		
 		
 		else if(gameMode == 1 || gameMode == 2 || gameMode == 3){
 			
-			
-			currPlayer = willWePlayFirst^(turn%2);
+			/*
+			willWePlayFirst = 1 && turn%2 = 0 >> currPlayer = 1, 0
+			willWePlayFirst = 1 && turn%2 = 1 >> currPlayer = 0, 1
+			willWePlayFirst = 0 && turn%2 = 0 >> currPlayer = 0, 1
+			willWePlayFirst = 0 && turn%2 = 1 >> currPlayer = 1, 0
+			*/
+			currPlayer = turn%2;
 			opponentPlayerNum = willWePlayFirst;
 		
 			if(turn > lastTurn){
 				playerPos = 0;
 				lastTurn = turn;
 			}
-			update();
 			winner = isThereAwinner();
+			update();
+			
 			Nokia5110_SetCursor(1, 0);
 			if(winner){
 				//Nokia5110_Clear();
-				
 				if(winner == 1 ){
-					Nokia5110_Clear();
+					
 					Nokia5110_OutString("P1 wins");
 				}
 				else{
-					//Nokia5110_Clear();
 					Nokia5110_OutString("P2 wins");
 				}
 				break;
@@ -657,19 +693,18 @@ int main(void){
 				}else{
 					
 					if(
-							((gameMode == 2 && opponentPlayerNum == currPlayer) || //p1 vs ai
+						((gameMode == 2 && opponentPlayerNum == currPlayer) || //p1 vs ai
 							(gameMode == 3)) && // ai vs ai
 							kitsNum == 1
 						){
-						Delay100ms(1);
+						//Delay100ms(1);
 						playerPos = getAiNextPos();
 						playersCoins[currPlayer][turn/2].x = colCenter[playerPos];
 						update();
 						
 						playInAcol();
-						Delay100ms(1);
+						//Delay100ms(1);
 					}
-					
 				}
 				
 			}
@@ -677,7 +712,6 @@ int main(void){
 			
 		
   }
-
 }
 
 
