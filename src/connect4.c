@@ -50,9 +50,22 @@ int isMenuMode;
 int menuNum;
 int SW1;
 int SW2;
-
-
 int codingMode;
+
+
+//for the communication
+const int allowedNumOftrials = 10;
+int numOfTrials;
+
+unsigned char inputFromTheSecondDevice;
+unsigned char outputToTheSecondDevice;
+
+//the protocole
+unsigned char handshake = 17;
+unsigned char confirmation = 200;
+unsigned char player1 = 31;
+unsigned char player2 = 32;
+
 
 
 //this structure describes each individual cell
@@ -102,6 +115,9 @@ void gameInit(){
 	willWePlayFirst = 1;
 	isMenuMode = 1;
 	menuNum = 0;
+	codingMode = 0;
+	
+	numOfTrials = 0;
 	
 	//the grid dimintions
 	fullGridW = (cellW * numOfCol + vLineW*(numOfCol+1));
@@ -432,7 +448,7 @@ int getAiNextPos(){
 	}
 	else{
 		do
-			decision = rand() % 7;
+			decision = rand()%7;
 		while (decision == 3);
 	}
 	//decision = 3;
@@ -440,9 +456,15 @@ int getAiNextPos(){
 	return decision;
 }
 
-
+void outputToTheScreen(int x, int y, char s[], int clear){
+	if(clear)
+		Nokia5110_Clear();
+	Nokia5110_SetCursor(x, y);
+	Nokia5110_OutString(s);
+}
 void theMenu(){
 		if(menuNum == 0){
+				GPIO_PORTF_DATA_R = 0x06;
 				Nokia5110_Clear();
 				Nokia5110_SetCursor(4, 0);
 				Nokia5110_OutString("MENU");
@@ -476,6 +498,7 @@ void theMenu(){
 				Nokia5110_OutString(">>"); 
 					}
 			else if (menuNum == 1){
+				GPIO_PORTF_DATA_R = 0x0E;
 				Nokia5110_Clear();
 				Nokia5110_SetCursor(2, 2);
 				Nokia5110_OutString("1 kit");
@@ -502,6 +525,7 @@ void theMenu(){
 					//continue;
 				} 	
 				else if (kitsNum==2) {
+				
 				menuNum = 2;
 				}
 				menuCursor = 0;
@@ -510,6 +534,7 @@ void theMenu(){
 				Nokia5110_OutString(">>"); 
 			}
 			else if (menuNum == 2){
+				GPIO_PORTF_DATA_R = 0x0C;
 				Nokia5110_Clear();
 				Nokia5110_SetCursor(2, 2);
 				Nokia5110_OutString("Master");
@@ -532,12 +557,80 @@ void theMenu(){
 					while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
 					isMaster = menuCursor + 1 ;
 				if(isMaster==1){
-					menuNum = 3 ;
-				}
-				else {
+					//menuNum = 3;
+					
+					//[master] the handshake <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+					//the master should send 17
+					while(numOfTrials < allowedNumOftrials){
+						outputToTheScreen(2, 2, "Trying to connect..", 1);
+						GPIO_PORTF_DATA_R = 0x04; //blue led is on
+						
+						UART0_OutChar(handshake);
+						inputFromTheSecondDevice = UART0_InCharNonBlocking(); // check for confirmation from the slave
+						
+						Delay100ms(5); // delay .5 second
+						
+						//if there was data, break the loop
+						if(inputFromTheSecondDevice) break;
+						
+						numOfTrials++;
+					}
+					numOfTrials = 0;
+					
+					if(inputFromTheSecondDevice == confirmation ){
+						
+						outputToTheScreen(2, 2, "Trying to connect..", 1);
+						GPIO_PORTF_DATA_R = 0x08; //green led is on
+						menuNum = 3; // got to the next menu
+						
+					}else{
+						outputToTheScreen(2, 2, "Error! going to the previuos menu", 1);
+						GPIO_PORTF_DATA_R = 0x02; //red led is on
+						Delay100ms(5);
+					}
+					
+				}else {
+					
 					isMaster = 0;
-					isMenuMode = 0;
-					//continue;
+					//isMenuMode = 0;
+					
+					
+					//[slave] the handshake <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+					//the master should send 17
+					while(numOfTrials < allowedNumOftrials){
+						outputToTheScreen(2, 2, "The handshake.", 1);
+						GPIO_PORTF_DATA_R = 0x04; //blue led is on
+						
+						Delay100ms(5); // delay .5 second
+						inputFromTheSecondDevice = UART0_InCharNonBlocking(); // see if there was data sent by the master
+						
+						//if there was data, break the loop
+						if(inputFromTheSecondDevice) break;
+						
+						numOfTrials++;
+					}
+					numOfTrials = 0;
+					
+					if(inputFromTheSecondDevice == handshake ){
+						
+						outputToTheScreen(2, 2, "Connected, confirmation code is sent.", 1);
+						
+						GPIO_PORTF_DATA_R = 0x08; //green led is on
+						
+						isMenuMode = 0; // get out from the menu
+						
+						UART0_OutChar(confirmation);
+						Delay100ms(5);
+					}else{
+						
+						outputToTheScreen(2, 2, "Error! going to the previuos menu", 1);
+						GPIO_PORTF_DATA_R = 0x02; //red led is on
+						Delay100ms(5);
+					}
+					
+					
+					
+					
 				}
 				menuCursor = 0;
 			}
@@ -578,12 +671,15 @@ void theMenu(){
 
 
 
+const long ColorWheel[8] = {0x02,0x0A,0x08,0x0C,0x04,0x06,0x0E,0x00};
+long prevSW1 = 0;        // previous value of SW1
+long prevSW2 = 0;        // previous value of SW2
+unsigned char inColor;   // color value from other microcontroller
+unsigned char color = 0; // this microcontroller's color value
+
 char x;
-int xx;
-
-
 int main(void){
-	UART_Init();
+	UART0_Init();
   TExaS_Init(SSI0_Real_Nokia5110_Scope);  // set system clock to 80 MHz
   Random_Init(1);
   Nokia5110_Init();
@@ -607,10 +703,10 @@ int main(void){
 	codingMode = 1;
 	
 	
-	//x = UART_InChar();
+	//x = UART1_InChar();
 	
 	
-	//UART_OutChar('a');
+	//UART1_OutChar('a');
 	
 	if(!codingMode){
 		Nokia5110_ClearBuffer();
@@ -626,6 +722,26 @@ int main(void){
 		Delay100ms(1);
 	}
 	
+	/*
+	while(1){
+		SW1 = GPIO_PORTF_DATA_R&0x10; // Read SW1
+    if((SW1 == 0) && prevSW1){    // falling of SW1?
+      color = (color+1)&0x07;     // step to next color 
+    }
+    prevSW1 = SW1; // current value of SW1 
+    SW2 = GPIO_PORTF_DATA_R&0x01; // Read SW2
+    if((SW2 == 0) && prevSW2){    // falling of SW2?
+      UART0_OutChar(color+0x30);   // send color as '0' - '7'
+    }
+    prevSW2 = SW2; // current value of SW2 
+    inColor = UART0_InCharNonBlocking();
+    if(inColor){ // new data have come in from the UART??
+      color = inColor&0x07;     // update this computer's color
+    }
+    GPIO_PORTF_DATA_R = ColorWheel[color];  // update LEDs
+		
+	}*/
+	
 	
 	
   while(1){
@@ -639,13 +755,7 @@ int main(void){
 		
 		
 		else if(gameMode == 1 || gameMode == 2 || gameMode == 3){
-			
-			/*
-			willWePlayFirst = 1 && turn%2 = 0 >> currPlayer = 1, 0
-			willWePlayFirst = 1 && turn%2 = 1 >> currPlayer = 0, 1
-			willWePlayFirst = 0 && turn%2 = 0 >> currPlayer = 0, 1
-			willWePlayFirst = 0 && turn%2 = 1 >> currPlayer = 1, 0
-			*/
+
 			currPlayer = turn%2;
 			opponentPlayerNum = willWePlayFirst;
 		
@@ -659,7 +769,7 @@ int main(void){
 			Nokia5110_SetCursor(1, 0);
 			if(winner){
 				//Nokia5110_Clear();
-				if(winner == 1 ){
+				if(winner == 1){
 					
 					Nokia5110_OutString("P1 wins");
 				}
