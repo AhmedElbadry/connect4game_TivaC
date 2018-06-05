@@ -1,5 +1,4 @@
 
-
 #include "tm4c123gh6pm.h"
 #include "Nokia5110.h"
 #include "Random.h"
@@ -54,8 +53,10 @@ int codingMode;
 
 
 //for the communication
-const int allowedNumOftrials = 10;
-int numOfTrials;
+const int allowedNumOftrialsToOut = 10;
+const int allowedNumOftrialsToInput = 1000000;
+int numOfTrialsOut;
+int numOfTrialsIn;
 
 unsigned char inputFromTheSecondDevice;
 unsigned char outputToTheSecondDevice;
@@ -116,9 +117,7 @@ void gameInit(){
 	isMenuMode = 1;
 	menuNum = 0;
 	codingMode = 0;
-	
-	numOfTrials = 0;
-	
+		
 	//the grid dimintions
 	fullGridW = (cellW * numOfCol + vLineW*(numOfCol+1));
 	fullGridH = (cellH*numOfRow +  hLineW*numOfRow);
@@ -569,7 +568,7 @@ void theMenu(){
 					//the master should send 17
 					outputToTheScreen(2, 2, "Trying to connect..", 1);
 					GPIO_PORTF_DATA_R = 0x04; //blue led is on
-					while(numOfTrials < allowedNumOftrials + 1000000){
+					while(numOfTrialsIn < allowedNumOftrialsToInput){
 						
 						UART1_OutChar(handshake);
 						inputFromTheSecondDevice = UART1_InCharNonBlocking(); // check for confirmation from the slave
@@ -579,9 +578,9 @@ void theMenu(){
 						//if there was data, break the loop
 						if(inputFromTheSecondDevice) break;
 						
-						numOfTrials++;
+						numOfTrialsIn++;
 					}
-					numOfTrials = 0;
+					numOfTrialsIn = 0;
 					
 					if(inputFromTheSecondDevice){
 						
@@ -603,7 +602,7 @@ void theMenu(){
 					
 					//[slave] the handshake <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 					//the master should send 17
-					while(numOfTrials < allowedNumOftrials + 1000000){
+					while(numOfTrialsIn < allowedNumOftrialsToInput){
 						outputToTheScreen(2, 2, "The handshake.", 1);
 						GPIO_PORTF_DATA_R = 0x04; //blue led is on
 						
@@ -613,9 +612,9 @@ void theMenu(){
 						//if there was data, break the loop
 						if(inputFromTheSecondDevice) break;
 						
-						numOfTrials++;
+						numOfTrialsIn++;
 					}
-					numOfTrials = 0;
+					numOfTrialsIn = 0;
 					if(inputFromTheSecondDevice){
 						
 						outputToTheScreen(2, 2, "Connected, confirmation code is sent.", 1);
@@ -705,7 +704,7 @@ int main(void){
 	
 	willWePlayFirst = 1;
 	
-	codingMode = 1;
+	codingMode = 0;
 	
 	
 	//x = UART1_InChar();
