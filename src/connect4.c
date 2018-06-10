@@ -12,8 +12,6 @@ void Delay100ms(unsigned long count);
 void PortF_Init(void);
 
 
-
-
 int const cellW = 8; //cell width
 int const cellH = 5; //cell height
 int const hLineW = 1; //horizontal line width
@@ -23,7 +21,6 @@ int const numOfRow = 6;
 int const numOfCoinsForEachPlayer = 21; // (numOfCol*numOfRow)/2
 int const coinH = 3; //cell height
 int const coinW = 6; //cell width
-
 int leftMargin; //empty space on the left of the grid
 int topMargin; //empy space on the top of the grid
 int fullGridH; //grid height
@@ -43,6 +40,7 @@ int	j;
 int kitsNum;
 int isMaster;
 int willWePlayFirst;
+int ai;
 int currPlayer;
 int opponentPlayerNum;
 int isMenuMode;
@@ -51,24 +49,24 @@ int SW1;
 int SW2;
 int codingMode;
 int cellReq;
-
-
 //for the communication
 const int allowedNumOftrialsToOut = 10;
 const int allowedNumOftrialsToInput = 1000000;
 int numOfTrialsOut;
 int numOfTrialsIn;
-
 unsigned char inputFromTheSecondDevice;
 unsigned char outputToTheSecondDevice;
-
 //the protocole
-unsigned char handshake = 2;
-unsigned char confirmation = 3;
+unsigned char handshake = 17;
+unsigned char confirmation = 200;
+unsigned char masterConf = 20;
 unsigned char player1 = 31;
 unsigned char player2 = 32;
-
-
+unsigned char invalid = 24;
+unsigned char youWin = 24;
+unsigned char iWin = 24;
+unsigned char tie = 24;
+unsigned char temp;
 
 //this structure describes each individual cell
 //(x, y) are the center point of a cell
@@ -309,6 +307,7 @@ int isThereAwinner(){
 }
 
 
+
 int checkTriples(){
 		cellReq=-1;
 		for(i = 0; i < numOfRow; i++){
@@ -322,120 +321,199 @@ int checkTriples(){
 						theGrid[i][j].player != 0 
 						){
 							cellReq = j ;
-							break;
+							if(theGrid[i][j].player == ai)
+								break;
 						}
 				}
 				
 				//horizontal ends 
-				else if(		//right side
+				if(		//right side
 							j + 2 < numOfCol &&
 							theGrid[i][j].player == theGrid[i][j+1].player &&
 							theGrid[i][j+1].player == theGrid[i][j+2].player &&
 							theGrid[i][j+3].player == 0 &&
 							theGrid[i][j].player != 0 &&
-							((i == 5 ) || (colCoins[j+3] == numOfRow - i))
+							((i == 5 ) || (colCoins[j+3] == numOfRow - i - 1))
 						){							
-									cellReq = j+3;
+								cellReq = j+3;
+								if(theGrid[i][j].player == ai)
 									break;
 							}
-				else if(		//left side
+				if(		//left side
 							j - 1 >= 0 &&
 							theGrid[i][j].player == theGrid[i][j+1].player &&
 							theGrid[i][j+1].player == theGrid[i][j+2].player &&
 							theGrid[i][j-1].player == 0 &&
 							theGrid[i][j].player != 0 &&
-							((i == 5 ) || (colCoins[j-1] == numOfRow - i))
+							((i == 5 ) || (colCoins[j-1] == numOfRow - i - 1 ))
 
 						){
-									cellReq = j-1;
+							cellReq = j-1;
+							if(theGrid[i][j].player == ai)
 									break;
 							
 							}
 				//horizontal middle left   
-				else if(
+				if(
 						theGrid[i][j].player == theGrid[i][j+2].player &&
 						theGrid[i][j+2].player == theGrid[i][j+3].player &&
 						theGrid[i][j+1].player == 0  &&
 						theGrid[i][j].player != 0 
 						){if( 	//left side
-								(i == 5 ) || (colCoins[j+1] == numOfRow - i)
+								(i == 5 ) || (colCoins[j+1] == numOfRow - i - 1)
 							)
 								{
 									cellReq = j+1;
-									break;
+									if(theGrid[i][j].player == ai)									
+										break;
+									
 								}
 						}
 				//horizontal middle right
-				else if(
+				if(
 						theGrid[i][j].player == theGrid[i][j+1].player &&
 						theGrid[i][j+1].player == theGrid[i][j+3].player &&
 						theGrid[i][j+2].player == 0  &&
 						theGrid[i][j].player != 0 
 						){if( 	//right side
-								(i == 5 ) || (colCoins[j+2] == numOfRow - i)
+								(i == 5 ) || (colCoins[j+2] == numOfRow - i - 1)
 							)
 								{
 									cellReq = j+2;
-									break;
+									if(theGrid[i][j].player == ai)
+										break;
 								}
 						}
-						
-				
-			/*
 				//diagonally right
 				if(i + 2 < numOfRow && j + 2 < numOfCol){
-					if(
-						theGrid[i][j].player == theGrid[i+1][j+1].player &&
-						theGrid[i+1][j+1].player == theGrid[i+2][j+2].player &&
-						theGrid[i][j].player != 0
+					if(	//after diagonal
+							theGrid[i][j].player == theGrid[i+1][j+1].player &&
+							theGrid[i+1][j+1].player == theGrid[i+2][j+2].player &&
+							theGrid[i][j].player != 0 &&
+							theGrid[i+3][j+3].player == 0 &&
+							colCoins[j+3] == numOfRow - i -4 &&
+							j+3 < numOfCol &&
+							i+3 < numOfRow 
 						)
 						{
-								if(
-									j+3 < numOfCol &&
-									i+3 < numOfRow &&
-									theGrid[i][j+3].player == 0 && 
-									((i == 0 ) || colCoins[j+3] == i))
-									{
-										cellReq = j+3;
+							cellReq = j+3;
+							if(theGrid[i][j].player == ai)
 										break;
-									}
-								else if(
-									j-1 >= 0 &&
-									theGrid[i][j-1].player == 0 && 
-									((i == 0 ) || colCoins[j-1] == i)
-								)
-									{
+						}
+						if(	//before diagonal
+ 								j-1 >= 0 &&
+								i-1 >= 0 &&
+								theGrid[i][j].player == theGrid[i+1][j+1].player &&
+								theGrid[i+1][j+1].player == theGrid[i+2][j+2].player &&
+								theGrid[i][j].player != 0 &&
+								theGrid[i-1][j-1].player == 0 &&
+								colCoins[j-1] == numOfRow - i
+							)
+							{
 										cellReq = j-1;
+										if(theGrid[i][j].player == ai)
 										break;
+								
 									}
 							}
-						}
+						
 			
 			
 			//diagonally left
-			if(i + 3 < numOfRow && j - 3 >= 0){
+			if(i + 2 < numOfRow && j - 2 >= 0){
+					if(	//after diagonal
+							j-3 >= 0 &&
+							i+3 < numOfRow &&
+							theGrid[i][j].player == theGrid[i+1][j-1].player &&
+							theGrid[i+1][j-1].player == theGrid[i-2][j-2].player &&
+							theGrid[i][j].player != 0 &&
+							theGrid[i+3][j-3].player == 0 &&
+							colCoins[j-3] == numOfRow - i -4 
+						)
+						{
+							cellReq = j-3;
+							if(theGrid[i][j].player == ai)
+										break;
+						}
+						if(	//before diagonal
+ 								j+1 < numOfCol &&
+								i-1 >= 0 &&
+								theGrid[i][j].player == theGrid[i+1][j-1].player &&
+								theGrid[i+1][j-1].player == theGrid[i-2][j-2].player &&
+								theGrid[i][j].player != 0 &&
+								theGrid[i-1][j+1].player == 0 &&
+								colCoins[j+1] == numOfRow - i
+							)
+							{
+										cellReq = j+1;
+										if(theGrid[i][j].player == ai)
+											break;
+									}
+							}
+							//diagonal right middle left   
 				if(
-					theGrid[i][j].player == theGrid[i+1][j-1].player &&
-					theGrid[i+1][j-1].player == theGrid[i+2][j-2].player &&
-					theGrid[i+2][j-2].player == theGrid[i+3][j-3].player &&
-					theGrid[i][j].player != 0
-					){
-						cellReq = theGrid[i][j].player;
-						break;
+						i + 3 < numOfRow && j + 3 < numOfCol &&
+						theGrid[i][j].player == theGrid[i+2][j+2].player &&
+						theGrid[i+2][j+2].player == theGrid[i+3][j+3].player &&
+						theGrid[i+1][j+1].player == 0  &&
+						theGrid[i][j].player != 0 &&
+						colCoins[j+1] == numOfRow - i	- 2
+						){
+									cellReq = j+1;
+									if(theGrid[i][j].player == ai)									
+										break;
+						}
+				//diagonal right middle right
+				if(
+						i + 3 < numOfRow && j + 3 < numOfCol &&
+						theGrid[i][j].player == theGrid[i+1][j+1].player &&
+						theGrid[i+1][j+1].player == theGrid[i+3][j+3].player &&
+						theGrid[i+2][j+2].player == 0  &&
+						theGrid[i][j].player != 0 &&
+						colCoins[j+2] == numOfRow - i	-3
+						)
+						{
+							cellReq = j+2;
+							if(theGrid[i][j].player == ai)
+								break;
+						}
+
+						//diagonal left middle right
+				if(
+						(i + 3 < numOfRow )&& (j - 3 >= 0 )&&
+						theGrid[i][j].player == theGrid[i+2][j-2].player &&
+						theGrid[i+2][j-2].player == theGrid[i+3][j-3].player &&
+						theGrid[i+1][j-1].player == 0  &&
+						theGrid[i][j].player != 0 &&
+						colCoins[j-1] == numOfRow - i	- 2
+						){
+									cellReq = j-1;
+									if(theGrid[i][j].player == ai)									
+										break;
+						}
+				//diagonal left middle left
+				if(
+						(i + 3 < numOfRow )&& (j - 3 >= 0 )&&
+						theGrid[i][j].player == theGrid[i+1][j-1].player &&
+						theGrid[i+1][j-1].player == theGrid[i+3][j-3].player &&
+						theGrid[i+2][j-2].player == 0  &&
+						theGrid[i][j].player != 0 &&
+						colCoins[j-2] == numOfRow - i	-3
+						)
+						{
+							cellReq = j-2;
+							if(theGrid[i][j].player == ai)
+								break;
+						}
+						
+						}
 					}
-			}
-			
-	*/
-			
-			
-		}
-	}
+
 	if (cellReq > -1)
 		return cellReq;
 	else 
 		return -1;
 }
-
 int shouldPlayWithSw(){
 	if(
 		gameMode == 1 || //if p1 vs p2
@@ -500,6 +578,7 @@ void theMenu(){
 				Nokia5110_OutString("P1 vs AI");			
 				Nokia5110_SetCursor(2, 4);
 				Nokia5110_OutString("AI vs AI");
+
 				
 				Nokia5110_SetCursor( 0 , menuCursor + 2);
 				Nokia5110_OutString(">>"); 
@@ -637,26 +716,26 @@ void theMenu(){
 					
 					//[slave] the handshake <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 					//the master should send 17
-					while(numOfTrialsIn < allowedNumOftrialsToInput){
+					//while(numOfTrialsIn < allowedNumOftrialsToInput){
 						outputToTheScreen(2, 2, "The handshake.", 1);
 						GPIO_PORTF_DATA_R = 0x04; //blue led is on
 						
-						if(codingMode) Delay100ms(5); // delay .5 second
-						inputFromTheSecondDevice = UART1_InCharNonBlocking(); // see if there was data sent by the master
+						if(codingMode) Delay100ms(1); // delay .5 second
+						inputFromTheSecondDevice = UART1_InChar(); // see if there was data sent by the master
 						
 						//if there was data, break the loop
-						if(inputFromTheSecondDevice){
+						//if(inputFromTheSecondDevice){
 							/*GPIO_PORTF_DATA_R = 0x02;
 							for(i = 0; i < (int)inputFromTheSecondDevice*2; i++){
 								GPIO_PORTF_DATA_R ^= 0x04;
 								if(!codingMode) Delay100ms(5);
 							}*/
-							break;
-						}
+							//break;
+						//}
 						
-						numOfTrialsIn++;
-					}
-					numOfTrialsIn = 0;
+						//numOfTrialsIn++;
+					//}
+					//numOfTrialsIn = 0;
 					if(inputFromTheSecondDevice == handshake){
 						
 						outputToTheScreen(2, 2, "Connected, confirmation code is sent.", 1);
@@ -667,6 +746,43 @@ void theMenu(){
 						
 						UART1_OutChar(confirmation);
 						if(!codingMode) Delay100ms(5);
+						
+						
+						//[slave] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< #playerMaster
+						//while(numOfTrialsIn < allowedNumOftrialsToInput){
+								outputToTheScreen(2, 2, "waiting for p1 or p2", 1);
+								
+								inputFromTheSecondDevice = UART1_InChar(); // check for confirmation from the slave
+								
+								if(codingMode) Delay100ms(5); // delay .5 second
+								
+								//if there was data, break the loop
+								if(inputFromTheSecondDevice){
+									if(inputFromTheSecondDevice == player1){
+										outputToTheScreen(2, 2, "ok, I am p2", 1);
+										outputToTheScreen(2, 3, "sending conf..", 0);
+										willWePlayFirst = 0;
+										UART1_OutChar(confirmation);
+										if(!codingMode) Delay100ms(5);
+										isMenuMode = 0;
+										//break;
+									}else if(inputFromTheSecondDevice == player2){
+										outputToTheScreen(2, 2, "ok, I am p1", 1);
+										outputToTheScreen(2, 3, "sending conf..", 0);
+										willWePlayFirst = 1;
+										UART1_OutChar(confirmation);
+										if(!codingMode) Delay100ms(5);
+										isMenuMode = 0;
+										//break;
+									}else{
+										outputToTheScreen(2, 2, "wrong code sent", 1);
+									}
+									
+								}
+								
+								//numOfTrialsIn++;
+							//}
+							//numOfTrialsIn = 0;
 					}else{
 						
 						outputToTheScreen(2, 2, "Error! going to the previuos menu", 1);
@@ -676,7 +792,9 @@ void theMenu(){
 					}
 
 				}
-				menuCursor = 0;
+				
+				
+					menuCursor = 0;
 			}
 				
 				Nokia5110_SetCursor( 0 ,menuCursor + 2);
@@ -712,13 +830,268 @@ void theMenu(){
 					
 					//[master] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< #playerMaster
 					
+					GPIO_PORTF_DATA_R = 0x04; //blue led is on
+					
+					
+					//while(numOfTrialsIn < allowedNumOftrialsToInput){
+						outputToTheScreen(2, 2, "sending..", 1);
+					if(menuCursor == 0){
+						UART1_OutChar(player1);
+						willWePlayFirst = 1;
+					}else{
+						UART1_OutChar(player2);
+						willWePlayFirst = 0;
+					}
+						inputFromTheSecondDevice = UART1_InChar(); // check for confirmation from the slave
+						
+						if(codingMode) Delay100ms(5); // delay .5 second
+						
+						//if there was data, break the loop
+						//if(inputFromTheSecondDevice){
+							/*GPIO_PORTF_DATA_R = 0x02;
+							for(i = 0; i < (int)inputFromTheSecondDevice*2; i++){
+								GPIO_PORTF_DATA_R ^= 0x04;
+								if(!codingMode) Delay100ms(5);
+							}*/
+						//	break;
+						//}
+						
+					//	numOfTrialsIn++;
+					//}
+					//numOfTrialsIn = 0;
+					
+					if(inputFromTheSecondDevice == confirmation){
+						outputToTheScreen(2, 2, "confiramtion received..", 1);
+						outputToTheScreen(2, 4, "loading the game..", 1);
+						if(codingMode) Delay100ms(5); 
+						isMenuMode = 0;
+					}else {
+						outputToTheScreen(2, 2, "Error", 1);
+					}
+					
 			}
 
 			
 		}
 }
+void master_master(){
+		if(isMaster){ //master kit
+			if(currPlayer == (1- willWePlayFirst)){
+				winner = isThereAwinner();
+				GPIO_PORTF_DATA_R = 0x04; //blue led is on
+				temp = playerPos;
+				//while(numOfTrialsOut < allowedNumOftrialsToOut){
+						UART1_OutChar(temp);
+						if(!codingMode) Delay100ms(5);
+						if(winner)
+								UART1_OutChar(winner);
+						else
+								UART1_OutChar(masterConf);
+
+						outputToTheScreen(0, 0, "info sent.", 0);
+						if(!codingMode) Delay100ms(5);
+						//while(numOfTrialsIn < allowedNumOftrialsToInput){
+								inputFromTheSecondDevice = UART1_InChar(); // check for confirmation from the slave
+								outputToTheScreen(0, 0, "waiting conf..", 0);
+								if(!codingMode) Delay100ms(5);
+								//if(inputFromTheSecondDevice){
+										//break;
+								//}
+
+								//numOfTrialsIn++;
+						//}
+						//numOfTrialsIn = 0;
+
+						if(inputFromTheSecondDevice == confirmation){
+								outputToTheScreen(0, 0, "conf receive", 0);
+								if(!codingMode) Delay100ms(5);
+								//break;
+						}else {
+								outputToTheScreen(0, 0, "error, resending data", 0);
+								if(!codingMode) Delay100ms(5);
+						}
+
+						//numOfTrialsOut++;
+				//}
+
+			}
+			
+		}else{
+			outputToTheScreen(0, 0, "ERR, master_master", 0);
+		}
+}
+
+void master_slave(){
+	if(isMaster){ //master kit
+		if(!(currPlayer == (1- willWePlayFirst))){
+			
+				//while(numOfTrialsIn < allowedNumOftrialsToInput){
+						inputFromTheSecondDevice = UART1_InChar(); // playerPos
+			
+						if(!codingMode) Delay100ms(5);
+						outputToTheScreen(0, 0, "waiting pos..", 0);
+						//if(inputFromTheSecondDevice){
+								//break;
+						//}
+
+						//numOfTrialsIn++;
+				//}
+				//numOfTrialsIn = 0;
+				if(inputFromTheSecondDevice){
+						outputToTheScreen(0, 0, "pos received", 0);
+						if(!codingMode) Delay100ms(5);
+						playerPos = inputFromTheSecondDevice;
+						playersCoins[currPlayer][turn/2].x = colCenter[playerPos];
+						update();
+
+						playInAcol();
+
+						winner = isThereAwinner();
+
+						GPIO_PORTF_DATA_R = 0x04; //blue led is on
+
+						//while(numOfTrialsOut < allowedNumOftrialsToOut){
+								if(winner)
+										UART1_OutChar(winner);
+								else
+										UART1_OutChar(masterConf);
+								outputToTheScreen(0, 0, "info sent.", 0);
+								if(!codingMode) Delay100ms(5);
+								//while(numOfTrialsIn < allowedNumOftrialsToInput){
+										inputFromTheSecondDevice = UART1_InChar(); // check for confirmation from the slave
+										outputToTheScreen(0, 0, "waiting conf..", 0);
+										//if(inputFromTheSecondDevice){
+										//		break;
+										//}
+
+									//	numOfTrialsIn++;
+								//}
+								//numOfTrialsIn = 0;
+
+								if(inputFromTheSecondDevice == confirmation){
+										outputToTheScreen(0, 0, "conf receive", 0);
+										if(!codingMode) Delay100ms(5);
+									//	break;
+								}else {
+										outputToTheScreen(0, 0, "error, resending data", 0);
+										if(!codingMode) Delay100ms(5);
+								}
+
+								numOfTrialsOut++;
+						//}
+						//if(numOfTrialsOut == allowedNumOftrialsToOut){
+						//		outputToTheScreen(0, 0, "ERROR!!!", 0);
+						//}else{
+							//	numOfTrialsOut = 0;
+						//}
+
+				}else{//invalid input
+						//while(numOfTrialsOut < allowedNumOftrialsToOut){
+										UART1_OutChar(invalid);
+										numOfTrialsIn++;
+										//while(numOfTrialsIn < allowedNumOftrialsToInput){
+												inputFromTheSecondDevice = UART1_InChar(); // check for confirmation from the slave
+												outputToTheScreen(0, 0, "waiting conf..", 0);
+												//if(inputFromTheSecondDevice){
+											//			break;
+											//	}
+
+										//		numOfTrialsIn++;
+										//}
+										//numOfTrialsIn = 0;
+
+										if(inputFromTheSecondDevice == confirmation){
+												outputToTheScreen(0, 0, "conf receive", 0);
+												if(!codingMode) Delay100ms(5);
+												//break;
+										}else {
+												outputToTheScreen(0, 0, "error, resending data", 0);
+												if(!codingMode) Delay100ms(5);
+										}
+
+								//}
+								//numOfTrialsIn = 0;
+				}
+			}
+		}else{
+			outputToTheScreen(0, 0, "ERR, master_slave", 0);
+		}
+}
+
+void slave_slave(){
+
+	if(!isMaster){ //master kit
+		if(currPlayer == (1- willWePlayFirst)){
+				playersCoins[currPlayer][turn/2].x = colCenter[playerPos];
+				update();
+				playInAcol();
+
+				GPIO_PORTF_DATA_R = 0x04; //blue led is on
+				//while(numOfTrialsOut < allowedNumOftrialsToOut){
+						UART1_OutChar(playerPos);
+
+						outputToTheScreen(0, 0, "info sent.", 0);
+						if(!codingMode) Delay100ms(5);
+						while(numOfTrialsIn < allowedNumOftrialsToInput){
+								inputFromTheSecondDevice = UART1_InChar(); // check for confirmation from the slave
+								outputToTheScreen(0, 0, "waiting conf..", 1);
+								if(inputFromTheSecondDevice){
+										break;
+								}
+
+								numOfTrialsIn++;
+						}
+						numOfTrialsIn = 0;
+
+						if(inputFromTheSecondDevice == masterConf){
+								outputToTheScreen(0, 0, "conf receive", 0);
+								if(!codingMode) Delay100ms(5);
+							//	break;
+						}else {
+								outputToTheScreen(0, 0, "error, resending data", 0);
+								if(!codingMode) Delay100ms(5);
+						}
+
+				//		numOfTrialsOut++;
+				//}
+				if(numOfTrialsOut == allowedNumOftrialsToOut){
+						outputToTheScreen(0, 0, "ERROR!!!", 1);
+				}
+			}else{
+			outputToTheScreen(0, 0, "ERR, slave_slave", 0);
+		}
+	}
+}
 
 
+void slave_master() {
+		if(!isMaster){ //master kit
+		if(!(currPlayer == (1- willWePlayFirst))){
+			
+    //while(numOfTrialsIn < allowedNumOftrialsToInput){
+				if(!codingMode) Delay100ms(5);
+				outputToTheScreen(0, 0, "waiting pos..", 0);
+        inputFromTheSecondDevice = UART1_InChar(); // check for confirmation from the slave
+				playerPos = inputFromTheSecondDevice;
+			
+				if(!codingMode) Delay100ms(5);
+				outputToTheScreen(0, 0, "waiting conf..", 0);
+				inputFromTheSecondDevice = UART1_InChar(); // check for confirmation from the slave
+        
+      //  if(inputFromTheSecondDevice){
+      //      break;
+      //  }
+
+    //    numOfTrialsIn++;
+    //}
+    //numOfTrialsIn = 0;
+
+    UART1_OutChar(confirmation);
+			}else{
+			outputToTheScreen(0, 0, "ERR, slave_master", 0);
+		}
+	}
+}
 
 const long ColorWheel[8] = {0x02,0x0A,0x08,0x0C,0x04,0x06,0x0E,0x00};
 long prevSW1 = 0;        // previous value of SW1
@@ -748,8 +1121,7 @@ int main(void){
 	//isMaster
 	
 	willWePlayFirst = 1;
-	
-	codingMode = 0;
+	ai = willWePlayFirst;
 	
 	
 	if(!codingMode){
@@ -757,13 +1129,13 @@ int main(void){
 		Nokia5110_DisplayBuffer();
 		Nokia5110_SetCursor(2,3);
 		Nokia5110_OutString("Connect4");	
-		Delay100ms(1);
+		Delay100ms(5);
 		Nokia5110_SetCursor(2,3);
 		Nokia5110_OutString("           ");
-		Delay100ms(1);
+		Delay100ms(5);
 		Nokia5110_SetCursor(2,3);
-		Nokia5110_OutString("Connect4");	
-		Delay100ms(1);
+		Nokia5110_OutString("welcome");	
+		Delay100ms(5);
 	}
 
 	
@@ -775,10 +1147,10 @@ int main(void){
 		
 		if(isMenuMode){
 			theMenu();
-	}//menu code end
+		}//menu code end
 		
 		
-		else if(gameMode == 1 || gameMode == 2 || gameMode == 3){
+		else { //start second main if
 
 			currPlayer = turn%2;
 			opponentPlayerNum = willWePlayFirst;
@@ -787,7 +1159,8 @@ int main(void){
 				playerPos = 0;
 				lastTurn = turn;
 			}
-			winner = isThereAwinner();
+			if(kitsNum == 1 || (isMaster && kitsNum == 2))
+				winner = isThereAwinner();
 			update();
 			
 			Nokia5110_SetCursor(1, 0);
@@ -804,8 +1177,11 @@ int main(void){
 			}
 
 			
+				
 				//when playing with switches
-				if(shouldPlayWithSw()){
+				if(shouldPlayWithSw() &&
+					((currPlayer == (1- willWePlayFirst) && kitsNum == 2) || kitsNum == 1 )
+				){
 					//wait for an input
 					while( SW1 && SW2){
 						SW1 = GPIO_PORTF_DATA_R&0x10;
@@ -831,15 +1207,22 @@ int main(void){
 					if(!SW2){
 						//wait untill SW2 is released
 						while(!SW2){SW2 = GPIO_PORTF_DATA_R&0x01;}
+						
+						if(kitsNum == 2){
+							master_master();
+							slave_slave();
+						}
+						
+						
 						playInAcol();
 					}
 					
-				}else{
-					
+				}else if(kitsNum == 1 ||
+					((currPlayer == (1- willWePlayFirst) && kitsNum == 2) || kitsNum == 1 )
+				){//for the ai
 					if(
 						((gameMode == 2 && opponentPlayerNum == currPlayer) || //p1 vs ai
-							(gameMode == 3)) && // ai vs ai
-							kitsNum == 1
+							(gameMode == 3)) // ai vs ai
 						){
 						if(!codingMode)
 							Delay100ms(1);
@@ -854,7 +1237,13 @@ int main(void){
 					}
 				}
 				
-			}
+				if(kitsNum == 2){
+					if(isMaster)
+						master_slave();
+					else
+						slave_master();
+				}
+			}//end second main if
 		
 			
 		
